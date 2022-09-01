@@ -15,7 +15,6 @@ class portfoliosController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -26,7 +25,6 @@ class portfoliosController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -42,11 +40,23 @@ class portfoliosController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "title_image"=>"required",
+            "title_image"=>"required|image|mimes:png,jpeg,jpg",
             "title"=>"required",
             "content"=>"required",
-            "descriptions" =>"required"
-        ]);
+            "descriptions" =>"required",
+            "images" => "nullable|array",
+            "images.*" => "nullable|image|mimes:png,jpg,jpeg"
+        ],[
+            "title_image.required" => "Ana resim yüklemek zorunludur.",
+            "title_image.image" => "Ana resim resim türünde olmak zorundadır.",
+            "title_image.mimes" => "Ana resim png, jpg, jpeg türlerinden biri olmalıdır.",
+            "title.required" => "Başlık alanı zorunludur",
+            "content.required" => "İçerik alanı zorunludur",
+            "descriptions.required" => "Açıklama alanı zorunludur",
+            "images.*.mimes" => "Resimler png, jpg, jpeg türlerinden biri olmalıdır.",
+            "images.*.image" => "Resimlerin türleri resim olmak zorundadır.",
+
+            ]);
 
         $portfolio = new Portfolio();
         $portfolio->title = $request->title;
@@ -98,9 +108,21 @@ class portfoliosController extends Controller
     public function update(Request $request, Portfolio $portfolio, $id)
     {
         $request->validate([
-            "title"=>"required",
+            "title"=>"required|image|mimes:png,jpeg,jpg",
             "content"=>"required",
-            "descriptions"=>"required"
+            "descriptions"=>"required",
+            "images" => "nullable|array",
+            "images.*" => "nullable|image|mimes:png,jpg,jpeg"
+        ],
+        [
+            "title_image.required" => "Ana resim yüklemek zorunludur.",
+            "title_image.image" => "Ana resim resim türünde olmak zorundadır.",
+            "title_image.mimes" => "Ana resim png, jpg, jpeg türlerinden biri olmalıdır.",
+            "title.required" => "Başlık alanı zorunludur",
+            "content.required" => "İçerik alanı zorunludur",
+            "descriptions.required" => "Açıklama alanı zorunludur",
+            "images.*.mimes" => "Resimler png, jpg, jpeg türlerinden biri olmalıdır.",
+            "images.*.image" => "Resimlerin türleri resim olmak zorundadır.",
         ]);
 
         $portfolio = Portfolio::findOrFail($id);

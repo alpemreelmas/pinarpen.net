@@ -25,7 +25,7 @@ class CustomerController extends Controller
         $request->validate([
             "name"=>"required",
             "surname"=>"required",
-            "phone_number"=>"required|min:10|max:14",
+            "phone_number"=>"required",
         ],[
             "name.required"=>"Lütfen müşteri isim alanını boş bıramayınız.",
             "surname.required"=>"Lütfen müşteri soyisim alanını boş bıramayınız.",
@@ -61,7 +61,7 @@ class CustomerController extends Controller
         $request->validate([
             "name"=>"required",
             "surname"=>"required",
-            "phone_number"=>"required|min:10|max:14",
+            "phone_number"=>"required",
         ],[
             "name.required"=>"Lütfen müşteri isim alanını boş bıramayınız.",
             "surname.required"=>"Lütfen müşteri soyisim alanını boş bıramayınız.",

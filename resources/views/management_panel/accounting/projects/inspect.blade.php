@@ -97,6 +97,9 @@
         $(document).ready(function () {
             $('#payment_table').DataTable({
                 dom: 'Bfrtip',
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                },
                 buttons: [
                     {
                         extend: 'copyHtml5',
@@ -114,6 +117,12 @@
                         extend: "print",
                         exportOptions: {
                             columns: [0, 1, 2]
+                        },
+                        customize: function (win) {
+                            $(win.document.body)
+                                .prepend(
+                                    '<img src="{{asset("img/pinarpen.png")}}" width="80%" style="opacity:0.1; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);"/>'
+                                );
                         }
                     }
                 ]

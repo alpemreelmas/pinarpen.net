@@ -76,7 +76,7 @@
                             <td>{{$debt->cost}}</td>
                             <td>{{\Carbon\Carbon::createFromDate($debt->created_at)->format('d/m/Y')}}</td>
                             <td class="d-flex flex-row justify-content-around">
-                                @if($debt->pending_payment !== 0 and $debt->paid_payment == 0 ) <a href="{{url("/admin/accounting/debt-payments/$debt->id/create")}}" title="Pay" class="btn btn-sm btn-warning"><i class="fas fa-money-bill-wave"></i></a>@endif
+                                @if($debt->pending_payment !== 0) <a href="{{url("/admin/accounting/debt-payments/$debt->id/create")}}" title="Pay" class="btn btn-sm btn-warning"><i class="fas fa-money-bill-wave"></i></a>@endif
                                 @if($debt->project_id == null and $debt->paid_payment == 0) <a href="{{url("/admin/accounting/debts/$debt->id/edit")}}" title="Edit" class="btn btn-sm btn-primary"><i class="fa fa-pen"></i></a>@endif
                                 @if($debt->project_id == null and $debt->pending_payment == $debt->cost)
                                         <form action="{{url("/admin/accounting/debts/$debt->id/")}}" method="post">
@@ -102,6 +102,9 @@
         $(document).ready(function() {
             $('#table').DataTable( {
                 dom: 'Bfrtip',
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                },
                 buttons: [
                     {
                         extend: 'copyHtml5',
@@ -119,6 +122,12 @@
                         extend:"print",
                         exportOptions: {
                             columns: [ 0, 1, 2,3,4,5,6,7 ]
+                        },
+                        customize: function (win) {
+                            $(win.document.body)
+                                .prepend(
+                                    '<img src="{{asset("img/pinarpen.png")}}" width="80%" style="opacity:0.1; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);"/>'
+                                );
                         }
                     }
                 ]

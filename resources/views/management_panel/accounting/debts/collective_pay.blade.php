@@ -25,12 +25,11 @@
                         <label for="supplier_id" >Tedarikçi Seçiniz</label>
                         <select name="supplier_id" class="form-control">
                             @foreach($suppliers as $supplier)
-                                <option value="{{$supplier->id}}" @if(old("supplier_id") == $supplier->id) selected @endif>{{$supplier->name}}</option>
+                                <option value="{{$supplier->id}}" @if(old("supplier_id") == $supplier->id) selected @endif>{{$supplier->name}} - {{$supplier->getDebts->sum("pending_payment")}} TL</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="amount">Ödeme Miktarı Giriniz.( Ödeyebileceğiniz maksimum tutar {{ $max_debt }} TL kadardır. ) </label>
                         <input type="number" name="amount" min="1" id="amount" class="form-control" required value="{{old("amount")}}">
                     </div>
                     <div class="form-group">

@@ -32,8 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="phone_number">Müşteri İletişim Numarası</label><br/>
-                        <span style="font-size: 14px">Lütfen numarayı 0543 999 99 99 şeklinde boşluklu ve sıfırlı yazınız.</span>
-                        <input type="tel" name="phone_number" id="phone_number" class="form-control" pattern="[0-9]{4} [0-9]{3} [0-9]{2} [0-9]{2}"  value="{{$customer->phone_number}}">
+                        <input type="tel" name="phone_number" id="phone_number" class="form-control"  value="{{$customer->phone_number}}">
                     </div>
                     <div class="form-group">
                         <label for="address">Müşteri Adresi</label>

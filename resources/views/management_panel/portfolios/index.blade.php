@@ -50,7 +50,7 @@
                                         @csrf
                                         @method("DELETE")
                                         <input type="hidden" name="id" value="{{$portfolio->id}}">
-                                        <button title="delete" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                                        <button title="delete" class="btn btn-sm btn-danger delete"><i class="fa fa-times"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -60,4 +60,28 @@
                 </div>
             </div>
         </div>
+@endsection
+@section("js")
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(".delete").click(function (e) {
+            e.preventDefault();
+            delete_id = e.target.getAttribute("delete_id");
+            new Swal({
+                title: 'Silmek istediğinizden emin misiniz ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, eminim sil.',
+                cancelButtonText: 'Hayır, emin değilim silme!',
+                confirmButtonClass: 'btn btn-warning',
+                cancelButtonClass: 'btn btn-danger',
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    $(e.target).closest("form").submit()
+                }
+            })
+        })
+    </script>
 @endsection

@@ -43,7 +43,7 @@
                         <h1 class="h3 mb-0 text-gray-800">@yield('title')</h1>
                         <a href="{{url('/')}}" target="_blank"
                            class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-globe fa-sm text-white-50"></i> Go Site</a>
+                                class="fas fa-globe fa-sm text-white-50"></i> Siteye git</a>
                     </div>
                     @yield('content')
                     <footer class="sticky-footer bg-white">

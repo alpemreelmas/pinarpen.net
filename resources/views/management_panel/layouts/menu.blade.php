@@ -5,14 +5,14 @@
         <i class="fa fa-bars"></i>
     </button>
 
-    Admin Page
+    Yönetim Paneli
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 
         <form action="logout" method="POST">
             @csrf
-            <button style="background: none; border: none; color: #4e73df; transition: 150ms all;" class="logout_btn" type="submit">Logout</button>
+            <button style="background: none; border: none; color: #4e73df; transition: 150ms all;" class="logout_btn" type="submit">Çıkış Yap</button>
             <style>
                 .logout_btn:hover {
                     color: #2e59d9;

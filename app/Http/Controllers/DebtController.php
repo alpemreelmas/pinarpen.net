@@ -8,7 +8,9 @@ use App\Models\Project;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class DebtController extends Controller
 {
@@ -123,20 +125,15 @@ class DebtController extends Controller
 
     public function collective_pay()
     {
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::whereRelation("getDebts","pending_payment",">","0")->get();
         if(Debt::sum("pending_payment") <= 0){
-            return redirect()->back()->withErrors("Ödeme borcunuz bulunmamaktadır.");
+            return redirect()->back()->withErrors("Toplu ödeyebileceğiniz borç bulunmamaktadır.");
         }
-
-        $max_debt = Debt::sum("pending_payment");
-        return view("management_panel.accounting.debts.collective_pay",compact("suppliers","max_debt"));
+        return view("management_panel.accounting.debts.collective_pay",compact("suppliers"));
     }
 
     public function collective_pay_post(Request $request)
     {
-
-        //TODO kısaltma için çalış üzerinde
-
         $request->validate([
             "supplier_id"=>"required",
             "amount"=>"required|numeric"
@@ -150,19 +147,18 @@ class DebtController extends Controller
             return redirect()->back()->withErrors("Lütfen 0'dan büyük bir sayı ile ödeme yapmayı deneyiniz.");
         }
 
-        if(Debt::sum("pending_payment") < $request->amount){
+        if(Debt::where("supplier_id",$request->supplier_id)->sum("pending_payment") < $request->amount){
             return redirect()->back()->withErrors("Toplu borcunuzdan fazla ödeme yapmaya çalışıyorsunuz.");
         }
 
         $remainder = $request->amount;
 
-        $debts = Debt::where("supplier_id",$request->supplier_id)->get();
+        $debts = Debt::where("supplier_id",$request->supplier_id)->where("pending_payment",">",0.00)->get();
 
-        $id = Str::uuid();
+        $id = explode("-",Uuid::uuid1())[0];
 
         for($i = 0; $i < $debts->count(); $i++){
             if($debts[$i]->pending_payment <= $remainder && $remainder !== 0 && $debts[$i]->pending_payment !== 0){
-
                     $remainder -= $debts[$i]->pending_payment;
                     $debts[$i]->paid_payment += $debts[$i]->pending_payment;
 
@@ -176,11 +172,10 @@ class DebtController extends Controller
 
                     $debts[$i]->save();
                     $debt_payment->save();
-
             }
         }
 
-        $debts = Debt::where("supplier_id",$request->supplier_id)->get();
+        $debts = Debt::where("supplier_id",$request->supplier_id)->where("pending_payment",">",0.00)->get();
         for($i = 0; $i < $debts->count(); $i++){
             if($debts[$i]->pending_payment > $remainder && $remainder !== 0){
                 $debts[$i]->pending_payment -= $remainder;

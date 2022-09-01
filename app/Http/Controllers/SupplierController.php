@@ -28,12 +28,13 @@ class SupplierController extends Controller
         $request->validate([
            "name"=>"required",
            "material_type"=>"required",
-           "iban"=>"required|numeric"
+           "iban"=>"required|numeric|digits:24"
         ],[
             "name.required"=>"Lütfen tedarikçi ismi giriniz.",
             "material_type.required"=>"Lütfen tedarikçinin sattığı materyal türünü seçiniz.",
             "iban.required"=>"Lütfen tedarikçinin iban adresini giriniz.",
-            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz."
+            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz.",
+            "iban.digits"=>"Lütfen tedarikçinin iban adresini :digits hane olacak şekilde giriniz."
         ]);
 
         if(Supplier::where("name",$request->name)->first()){
@@ -68,12 +69,13 @@ class SupplierController extends Controller
         $request->validate([
             "name"=>"required",
             "material_type"=>"required",
-            "iban"=>"required|numeric",
+            "iban"=>"required|numeric|digits:24",
         ],[
             "name.required"=>"Lütfen tedarikçi ismi giriniz.",
             "material_type.required"=>"Lütfen tedarikçinin sattığı materyal türünü seçiniz.",
             "iban.required"=>"Lütfen tedarikçinin iban adresini giriniz.",
-            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz."
+            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz.",
+            "iban.digits"=>"Lütfen tedarikçinin iban adresini :digits hane olacak şekilde giriniz."
         ]);
 
         if(Supplier::where("name",$request->name)->whereNotIn("id",[$id])->first()){

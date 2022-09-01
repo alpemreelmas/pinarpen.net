@@ -27,8 +27,14 @@ class servicesController extends Controller
    {
         $request->validate([
             "name"=>"required",
-            "image"=>"required|mimes:jpg,jpeg,png|max:500",
+            "image"=>"required|mimes:jpg,jpeg,png",
             "spec"=>"required",
+        ],
+        [
+            "name.required" => "İsim alanı zorunludur.",
+            "spec.required" => "Özellikler alanı zorunludur.",
+            "image.required" => "Resim alanı zorunludur.",
+            "image.mimes" => "Resim jpeg, png, jpg türünden biri olmak zorundadır.",
         ]);
 
         $service = new Service();
@@ -58,7 +64,13 @@ class servicesController extends Controller
         $request->validate([
             "name"=>"required",
             "spec"=>"required",
-            "image"=>"nullable|mimes:jpg,jpeg,png|max:500",
+            "image"=>"nullable|mimes:jpg,jpeg,png",
+        ],
+        [
+            "name.required" => "İsim alanı zorunludur.",
+            "spec.required" => "Özellikler alanı zorunludur.",
+            "image.required" => "Resim alanı zorunludur.",
+            "image.mimes" => "Resim jpeg, png, jpg türünden biri olmak zorundadır.",
         ]);
 
         $service = Service::findOrFail($id);

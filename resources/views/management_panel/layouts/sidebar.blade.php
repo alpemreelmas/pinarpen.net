@@ -3,10 +3,7 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('admin/dashboard')}}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">PınarPen</div>
     </a>
 
     <!-- Divider -->
@@ -22,10 +19,6 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Interface
-    </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
 
@@ -71,19 +64,6 @@
         </div>
 
     </li>
-
-    <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='customer-payments') active @endif">
-        <a class="nav-link " href="{{url("/admin/accounting/customer-payments/")}}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Müşteri Borç Ödemeleri</span></a>
-    </li>
-
-    <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='debt-payments') active @endif">
-        <a class="nav-link " href="{{url("/admin/accounting/debt-payments/")}}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Tedarikçi Borç Ödemeleri</span></a>
-    </li>
-
     <li class="nav-item">
         <a class="nav-link @if(Request::segment(2)=='suppliers') in @else collapsed @endif" href="#"
            data-toggle="collapse" data-target="#suppliersCollapse"
@@ -103,7 +83,6 @@
         </div>
 
     </li>
-
     <li class="nav-item">
         <a class="nav-link @if(Request::segment(2)=='debts') in @else collapsed @endif" href="#"
            data-toggle="collapse" data-target="#debtsCollapse"
@@ -122,6 +101,17 @@
             </div>
         </div>
 
+    </li>
+    <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='customer-payments') active @endif">
+        <a class="nav-link " href="{{url("/admin/accounting/customer-payments/")}}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Müşteri Borç Ödemeleri</span></a>
+    </li>
+
+    <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='debt-payments') active @endif">
+        <a class="nav-link " href="{{url("/admin/accounting/debt-payments/")}}">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Tedarikçi Borç Ödemeleri</span></a>
     </li>
 
     <li class="nav-item">
