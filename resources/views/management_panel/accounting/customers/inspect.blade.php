@@ -1,11 +1,9 @@
 @extends('management_panel.layouts.master')
-@section('title','Proje Detayı')
+@section('title',__("customer.inspect_customer"))
 @section('content')
-
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
-            <h6 class="m-0 font-weight-bold text-primary">{{$customer->name." ".$customer->surname }}
-                adlı kullanıcı ile yaptığınız tüm proje ve kullanıcı detayları.</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{__("customer.inspect_customer_activity")}}</h6>
         </div>
         <div class="card-body">
             @if($errors->any())
@@ -23,7 +21,7 @@
             <div class="row">
                 <div class="table-responsive col-md-12">
                     <div class="m-4">
-                        <h4 class="small font-weight-bold">Size olan tüm borçların ödeme durumu <span class="float-right">@if($all_debt == 0)Complete!@else
+                        <h4 class="small font-weight-bold">{{__("customer.all_debt_to_us")}}<span class="float-right">@if($all_debt == 0){{__("general.complete")}}@else
                                     @if($all_debt == 0) 0 @else {{(int)(($paid_payment*100)/$all_debt)}} %@endif @endif</span></h4>
                         <div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" style="width:  @if($all_debt == 0) 100% @else {{(int)(($paid_payment*100)/$all_debt)}}% @endif" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>

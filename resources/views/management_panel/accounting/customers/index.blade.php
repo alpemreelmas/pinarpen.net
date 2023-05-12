@@ -1,10 +1,10 @@
 @extends('management_panel.layouts.master')
-@section('title','Tüm Müşteriler')
+@section('title',__("customer.all_customers"))
 @section('content')
 
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
-            <h6 class="m-0 font-weight-bold text-primary">{{$customers->count()}} tane kayıtlı müşteri bulundu.</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{__("customer.found_customers",["count"=>$customers->count()])}}</h6>
         </div>
         <div class="card-body">
             @if($errors->any())
@@ -23,20 +23,20 @@
                 <table class="table table-bordered" id="table" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>İsim</th>
-                        <th>Soyisim</th>
-                        <th>Telefon Numarası</th>
-                        <th>Adres</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.name")}}</th>
+                        <th>{{__("customer.surname")}}</th>
+                        <th>{{__("customer.phone_number")}}</th>
+                        <th>{{__("customer.address")}}</th>
+                        <th>{{__("general.operations")}}</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>İsim</th>
-                        <th>Soyisim</th>
-                        <th>Telefon Numarası</th>
-                        <th>Adres</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.name")}}</th>
+                        <th>{{__("customer.surname")}}</th>
+                        <th>{{__("customer.phone_number")}}</th>
+                        <th>{{__("customer.address")}}</th>
+                        <th>{{__("general.operations")}}</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -45,7 +45,7 @@
                             <td>{{$customer->name}}</td>
                             <td>{{$customer->surname}}</td>
                             <td>{{$customer->phone_number}}</td>
-                            <td>@if($customer->address !== null){{$customer->address}}@else Kayıtlı adres yok. @endif</td>
+                            <td>@if($customer->address !== null){{$customer->address}}@else {{__("general.there_is_no_record")}} @endif</td>
                             <td class="d-flex flex-row justify-content-around">
                                 <a href="{{url("/admin/accounting/customers/$customer->id/edit")}}" title="edit" class="btn btn-sm btn-primary"><i class="fa fa-pen"></i></a>
                                 <a href="{{url("/admin/accounting/customers/$customer->id/inspect")}}" title="İncele" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a>
