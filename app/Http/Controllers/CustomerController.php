@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\Customer\StoreRequest;
+use App\Http\Requests\Accounting\Customer\UpdateRequest;
 use App\Models\Customer;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -20,78 +22,40 @@ class CustomerController extends Controller
         return view("management_panel.accounting.customers.create");
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "surname"=>"required",
-            "phone_number"=>"required",
-        ],[
-            "name.required"=>"Lütfen müşteri isim alanını boş bıramayınız.",
-            "surname.required"=>"Lütfen müşteri soyisim alanını boş bıramayınız.",
-            "phone_number.required"=>"Lütfen müşteri iletişim numarası alanını boş bıramayınız.",
-            "phone_number.min"=>"Müşteri iletişim numarası alanı en az :min karakter olmalıdır.",
-            "phone_number.max"=>"Müşteri iletişim numarası alanı en fazla :max karakter olabilir.",
-        ]);
-
         if(Customer::where("name",$request->name)->where("surname",$request->surname)->first()){
             return redirect()->back()->withErrors($request->name." ".$request->surname." adına ve soyadına ait kayıtlı müşteri vardır.");
         }
 
         DB::transaction(function() use ($request) {
-            $customer = new Customer();
-            $customer->name = $request->name;
-            $customer->surname = $request->surname;
-            $customer->phone_number = $request->phone_number;
-            $customer->address = $request->address ? $request->address : null;
-            $customer->save();
+            Customer::create($request->validated());
         });
 
         return redirect("/admin/accounting/customers")->with("success","Müşteri başarılı bir şekilde eklenmiştir.");
     }
 
-    public function edit($id)
+    public function edit(Customer $customer)
     {
-        $customer = Customer::whereId($id)->firstOrFail();
         return view("management_panel.accounting.customers.edit",compact("customer"));
     }
 
-    public function update($id,Request $request)
+    public function update(Customer $customer,UpdateRequest $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "surname"=>"required",
-            "phone_number"=>"required",
-        ],[
-            "name.required"=>"Lütfen müşteri isim alanını boş bıramayınız.",
-            "surname.required"=>"Lütfen müşteri soyisim alanını boş bıramayınız.",
-            "phone_number.required"=>"Lütfen müşteri iletişim numarası alanını boş bıramayınız.",
-            "phone_number.min"=>"Müşteri iletişim numarası alanı en az :min karakter olmalıdır.",
-            "phone_number.max"=>"Müşteri iletişim numarası alanı en fazla :max karakter olabilir.",
-        ]);
-
-        if(Customer::where("name",$request->name)->where("surname",$request->surname)->whereNotIn("id",[$id])->first()){
+        if(Customer::where("name",$request->name)->where("surname",$request->surname)->whereNotIn("id",[$customer->id])->first()){
             return redirect()->back()->withErrors($request->name." ".$request->surname." adına ve soyadına ait kayıtlı müşteri vardır.");
         }
 
-        DB::transaction(function() use ($request,$id) {
-
-            $customer = Customer::whereId($id)->firstOrFail();
-            $customer->name = $request->name;
-            $customer->surname = $request->surname;
-            $customer->phone_number = $request->phone_number;
-            $customer->address = $request->address ? $request->address : null;
-            $customer->save();
+        DB::transaction(function() use ($request,$customer) {
+            Customer::update($request->validated());
         });
 
         return redirect("/admin/accounting/customers")->with("success","Müşteri başarılı bir şekilde düzenlenmiştir.");
     }
 
-    public function inspect($id){
-        $customer = Customer::whereId($id)->firstOrFail();
-        $all_debt = Project::where("customer_id",$customer->id)->sum("cost");
-        $paid_payment = Project::where("customer_id",$customer->id)->sum("paid_payment");
+    public function inspect(Customer $customer){
+        $all_debt = $customer->getAllDebts();
+        $paid_payment = $customer->getPaidDebts();
         return view("management_panel.accounting.customers.inspect",compact("customer","all_debt","paid_payment"));
     }
-
 }

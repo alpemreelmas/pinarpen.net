@@ -227,7 +227,7 @@ class ProjectController extends Controller
 
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $project = Project::whereId($request->id)->firstOrFail();
         if($project->paid_payment == 0 && $project->pending_payment == $project->cost && CustomerPayment::where("project_id",$request->id)->get()->count() == 0){

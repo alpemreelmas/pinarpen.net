@@ -71,7 +71,7 @@ class ExpenditureController extends Controller
         return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider güncellenmiştir.");
     }
 
-    public function delete(Request $request){
+    public function destroy(Request $request){
         $request->validate(["id"=>"required"]);
 
         $expenditure = Expenditure::whereId($request->id)->firstOrFail();

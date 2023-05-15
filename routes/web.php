@@ -70,71 +70,29 @@ Route::prefix('admin')->middleware(["is_admin"])->group(function () {
 
     Route::prefix("/accounting")->group(function (){
 
-        Route::prefix("/customers")->group(function(){
-            Route::get("/",[CustomerController::class,"index"]);
-            Route::get("/create",[CustomerController::class,"create"]);
-            Route::post("/",[CustomerController::class,"store"]);
-            Route::get("/{id}/edit",[CustomerController::class,"edit"]);
-            Route::put("{id}",[CustomerController::class,"update"]);
-            Route::get("{id}/inspect",[CustomerController::class,"inspect"]);
+        Route::resource("customers",CustomerController::class)->except("destroy");
+        Route::get("/customers/{id}/inspect",[CustomerController::class,"inspect"])->name("customers.inspect");
+
+        Route::resource("projects",ProjectController::class);
+        Route::prefix("/projects")->name("projects.")->group(function (){
+            Route::post("/cancel",[ProjectController::class,"cancel"])->name("cancel");
+            Route::get("/{id}/inspect",[ProjectController::class,"inspect"])->name("inspect");
         });
 
-        Route::prefix("/projects")->group(function(){
-            Route::get("/",[ProjectController::class,"index"]);
-            Route::get("/create",[ProjectController::class,"create"]);
-            Route::post("/",[ProjectController::class,"store"]);
-            Route::post("/cancel",[ProjectController::class,"cancel"]);
-            Route::get("/{id}/edit",[ProjectController::class,"edit"]);
-            Route::put("{id}",[ProjectController::class,"update"]);
-            Route::delete("/{id}",[ProjectController::class,"delete"]);
+        Route::resource("customer-payments",CustomerPaymentController::class)->except(["edit","update"]);
 
-            Route::get("/{id}/inspect",[ProjectController::class,"inspect"]);
+        Route::resource("suppliers",SupplierController::class)->except("destroy");
+        Route::get("/suppliers/{id}/inspect",[SupplierController::class,"inspect"])->name("suppliers.inspect");
+
+        Route::resource("debts",DebtController::class);
+        Route::prefix("/debts")->name("debts.")->group(function(){
+            Route::get("/collective-pay",[DebtController::class,"collective_pay"])->name("collective_pay");
+            Route::post("/collective-pay",[DebtController::class,"collective_pay_post"])->name("collective_pay_post");
         });
 
-        Route::prefix("/customer-payments")->group(function(){
-            Route::get("/",[CustomerPaymentController::class,"index"]);
-            Route::get("/{id}/create",[CustomerPaymentController::class,"create"]);
-            Route::post("/",[CustomerPaymentController::class,"store"]);
-            Route::delete("/{id}",[CustomerPaymentController::class,"delete"]);
-        });
-
-        Route::prefix("/suppliers")->group(function(){
-            Route::get("/",[SupplierController::class,"index"]);
-            Route::get("/create",[SupplierController::class,"create"]);
-            Route::post("/",[SupplierController::class,"store"]);
-            Route::get("/{id}/edit",[SupplierController::class,"edit"]);
-            Route::put("{id}",[SupplierController::class,"update"]);
-            Route::get("{id}/inspect",[SupplierController::class,"inspect"]);
-        });
-
-        Route::prefix("/debts")->group(function(){
-            Route::get("/",[DebtController::class,"index"]);
-            Route::get("/create",[DebtController::class,"create"]);
-            Route::post("/",[DebtController::class,"store"]);
-            Route::get("/{id}/edit",[DebtController::class,"edit"]);
-            Route::put("{id}",[DebtController::class,"update"]);
-            Route::delete("/{id}",[DebtController::class,"delete"]);
-            Route::get("/collective-pay",[DebtController::class,"collective_pay"]);
-            Route::post("/collective-pay",[DebtController::class,"collective_pay_post"]);
-        });
-
-        Route::prefix("/debt-payments")->group(function(){
-            Route::get("/",[DebtPaymentController::class,"index"]);
-            Route::get("/{id}/create",[DebtPaymentController::class,"create"]);
-            Route::post("/",[DebtPaymentController::class,"store"]);
-            Route::delete("/{id}",[DebtPaymentController::class,"delete"]);
-        });
-
-        Route::prefix("/expenditures")->group(function(){
-            Route::get("/",[ExpenditureController::class,"index"]);
-            Route::get("/create",[ExpenditureController::class,"create"]);
-            Route::post("/",[ExpenditureController::class,"store"]);
-            Route::get("/{id}/edit",[ExpenditureController::class,"edit"]);
-            Route::put("/{id}",[ExpenditureController::class,"update"]);
-            Route::delete("/{id}",[ExpenditureController::class,"delete"]);
-        });
+        Route::resource("debt-payments",DebtPaymentController::class)->except(["edit","update"]);
+        Route::resource("expenditures",ExpenditureController::class);
     });
-
 });
 
 

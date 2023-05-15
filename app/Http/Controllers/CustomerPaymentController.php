@@ -71,7 +71,7 @@ class CustomerPaymentController extends Controller
 
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $customer_payment = CustomerPayment::whereId($request->id)->firstOrFail();
         //TODO kısa yolu var mı kontrol et.
