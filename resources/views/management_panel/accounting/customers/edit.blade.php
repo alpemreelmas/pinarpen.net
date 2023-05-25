@@ -7,18 +7,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">@yield('title')</h6>
             </div>
             <div class="card-body">
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach($errors->all() as $error)
-                            <li>{{$error}}</li>
-                        @endforeach
-                    </div>
-                @endif
-                @if(Session::get("success"))
-                    <div class="alert alert-success">
-                        {{Session::get("success")}}
-                    </div>
-                @endif
+                <x-flash-messages />
                 <form method="POST" action="{{url("/admin/accounting/customers/$customer->id")}}">
                     @csrf
                     @method("PUT")

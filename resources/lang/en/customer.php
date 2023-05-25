@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'all_customer' => 'All Customers',
+    'all_customers' => 'All Customers',
     'found_customers' => 'We found :count customers',
     'name'=>'Name',
     'surname'=>'Surname',
@@ -25,4 +25,5 @@ return [
     'inspect_customer'=>'Inspect Customer',
     'inspect_customer_activity'=>'You are inspecting :name activities',
     'all_debt_to_us'=>'Status of customer debts',
+    'already_exist'=>':name already exist',
 ];

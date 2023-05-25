@@ -71,7 +71,7 @@ Route::prefix('admin')->middleware(["is_admin"])->group(function () {
     Route::prefix("/accounting")->group(function (){
 
         Route::resource("customers",CustomerController::class)->except("destroy");
-        Route::get("/customers/{id}/inspect",[CustomerController::class,"inspect"])->name("customers.inspect");
+        Route::get("/customers/{customer}/inspect",[CustomerController::class,"inspect"])->name("customers.inspect");
 
         Route::resource("projects",ProjectController::class);
         Route::prefix("/projects")->name("projects.")->group(function (){

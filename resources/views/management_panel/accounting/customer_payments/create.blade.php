@@ -7,18 +7,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">@yield('title')</h6>
             </div>
             <div class="card-body">
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        @foreach($errors->all() as $error)
-                            <li>{{$error}}</li>
-                        @endforeach
-                    </div>
-                @endif
-                @if(Session::get("success"))
-                    <div class="alert alert-success">
-                        {{Session::get("success")}}
-                    </div>
-                @endif
+                <x-flash-messages />
                 <form method="POST" action="{{url("/admin/accounting/customer-payments/")}}">
                     @csrf
                     <div class="form-group">
@@ -42,7 +31,7 @@
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
     <script>
         $(function() {
-            var availableCustomers =  {!! json_encode($customers->toArray()) !!}
+            var availableCustomers = {{ json_encode($customers->toArray()) }}
             $( "#payer_name" ).autocomplete({
                 source: function (request,response) {
                     response($.map(availableCustomers,function (item) {

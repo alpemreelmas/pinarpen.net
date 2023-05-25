@@ -25,14 +25,14 @@ class CustomerController extends Controller
     public function store(StoreRequest $request)
     {
         if(Customer::where("name",$request->name)->where("surname",$request->surname)->first()){
-            return redirect()->back()->withErrors($request->name." ".$request->surname." adına ve soyadına ait kayıtlı müşteri vardır.");
+            return redirect()->back()->withErrors(trans("customer.already_exist",["name"=>$request->name." ".$request->surname]));
         }
 
         DB::transaction(function() use ($request) {
             Customer::create($request->validated());
         });
 
-        return redirect("/admin/accounting/customers")->with("success","Müşteri başarılı bir şekilde eklenmiştir.");
+        return redirect("/admin/accounting/customers")->with("success",trans("general.successful"));
     }
 
     public function edit(Customer $customer)
@@ -43,14 +43,14 @@ class CustomerController extends Controller
     public function update(Customer $customer,UpdateRequest $request)
     {
         if(Customer::where("name",$request->name)->where("surname",$request->surname)->whereNotIn("id",[$customer->id])->first()){
-            return redirect()->back()->withErrors($request->name." ".$request->surname." adına ve soyadına ait kayıtlı müşteri vardır.");
+            return redirect()->back()->withErrors(trans("customer.already_exist",["name"=>$request->name." ".$request->surname]));
         }
 
         DB::transaction(function() use ($request,$customer) {
             Customer::update($request->validated());
         });
 
-        return redirect("/admin/accounting/customers")->with("success","Müşteri başarılı bir şekilde düzenlenmiştir.");
+        return redirect("/admin/accounting/customers")->with("success",trans("general.successful"));
     }
 
     public function inspect(Customer $customer){

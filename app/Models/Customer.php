@@ -29,4 +29,9 @@ class Customer extends Model
         return $this->getProjects()->sum("paid_payment");
     }
 
+    public function getFullNameAttribute()
+    {
+        return $this->name." ".$this->surname;
+    }
+
 }
