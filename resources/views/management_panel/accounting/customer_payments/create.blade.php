@@ -8,12 +8,11 @@
             </div>
             <div class="card-body">
                 <x-flash-messages />
-                <form method="POST" action="{{url("/admin/accounting/customer-payments/")}}">
+                <form method="POST" action="{{url("/admin/accounting/projects/$project->id/customer-payments/")}}">
                     @csrf
                     <div class="form-group">
-                        <label for="payer_name">Ödeyen Adı</label><br/>
-                        <input id="payer_name" name="payer_name" class="form-control" type="text" value="{{old("payer_name")}}" required>
-                        <input name="project_id" class="form-control" type="hidden" value="{{$project->id}}" required>
+                        <label for="payer">Ödeyen Adı</label><br/>
+                        <input id="payer" name="payer" class="form-control" type="text" value="{{old("payer")}}" required>
                     </div>
                     <div class="form-group">
                         <label for="amount">Ödeme Miktarı</label><br/>
@@ -26,28 +25,6 @@
             </div>
         </div>
     </div>
-@endsection
-@section("js")
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    <script>
-        $(function() {
-            var availableCustomers = {{ json_encode($customers->toArray()) }}
-            $( "#payer_name" ).autocomplete({
-                source: function (request,response) {
-                    response($.map(availableCustomers,function (item) {
-                        if(item.value.match("^"+request.term,"i")){
-                            return {
-                                value: item.value
-                            }
-                        }else{
-                            return null
-                        }
-
-                    }))
-                }
-            });
-        } );
-    </script>
 @endsection
 
 

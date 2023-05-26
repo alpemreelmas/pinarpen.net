@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Accounting\CustomerPayment;
+namespace App\Http\Requests\Accounting\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -25,8 +24,15 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            "amount"=>["required","numeric","min:1"],
-            "payer"=>["required","string","max:255"],
+            "customer_id"=>"required",
+            "customer_name"=>"required",
+            "material_type"=>"required",
+            "material_amount"=>"required",
+            "payment_type"=>"required",
+            "supplier_id"=>"required",
+            "unit_price_of_material"=>"required|numeric|min:0.1",
+            "square_meters"=>"required|min:0.1|numeric",
+            "is_stock"=>"required"
         ];
     }
 }

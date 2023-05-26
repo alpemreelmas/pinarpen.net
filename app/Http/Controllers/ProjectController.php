@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\Project\StoreRequest;
 use App\Models\Customer;
 use App\Models\CustomerPayment;
 use App\Models\Debt;
@@ -31,32 +32,7 @@ class ProjectController extends Controller
 
     }
 
-    public function store(Request $request){
-        $request->validate([
-            "customer_id"=>"required",
-            "customer_name"=>"required",
-            "material_type"=>"required",
-            "material_amount"=>"required",
-            "payment_type"=>"required",
-            "supplier_id"=>"required",
-            "unit_price_of_material"=>"required|numeric|min:0.1",
-            "square_meters"=>"required|min:0.1|numeric",
-            "is_stock"=>"required"
-        ],[
-            "supplier_id.required"=>"Bir hata meydana geldi lütfen daha sonra tekrar deneyiniz.",
-            "customer_id.required"=>"Lütfen bir müşteri seçiniz.",
-            "unit_price_of_material.required"=>"Lütfen materyalin birim ücretini giriniz.",
-            "unit_price_of_material.numeric"=>"Materyalin birim fiyatını sayı olarak giriniz.",
-            "square_meters.numeric"=>"Metrekare alanını sayı olarak olacak şeklinde doldurunuz.",
-            "square_meters.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "unit_price_of_material.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "square_meters.required"=>"Lütfen metrekare alanınını boş bırakmayınız.",
-            "material_type.required"=>"Lütfen bir materyal türünü boş bıramayınız.",
-            "material_amount.required"=>"Lütfen bir materyal adetini boş bıramayınız.",
-            "payment_type.required"=>"Lütfen bir ödeme türü seçiniz.",
-            "costumer_name.required"=>"Lütfen bir müşteri seçiniz.",
-            "is_stock.required"=>"Lütfen stok türünü seçiniz."
-        ]);
+    public function store(StoreRequest $request){
 
         $customer = Customer::whereId($request->customer_id)->first();
         if($customer){

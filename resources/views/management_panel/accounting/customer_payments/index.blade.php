@@ -101,21 +101,14 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type:"POST",
-                        url:"{{url("/admin/accounting/customer-payments/")}}/"+delete_id,
+                        url:"{{url("/admin/accounting/projects/$customer_payment->project_id/customer-payments/")}}/"+delete_id,
                         data:{
                             "_token":"{{csrf_token()}}",
                             "id":delete_id,
                             "_method":"DELETE"
                         },
                         success:function () {
-                            new swal(
-                                'Başarılı!',
-                                'Taksit ödemesi başarılı bir şekilde silindi. Sayfa 3 saniye içinde yenilenecektir.',
-                                'success'
-                            )
-                            setTimeout(function () {
-                                location.reload()
-                            },3000)
+                            location.reload()
                         }
                     })
                 }

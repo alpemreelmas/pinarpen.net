@@ -50,7 +50,7 @@
                             <td class="d-flex flex-row justify-content-around">
                                     @if(!$project->is_cancelled)
                                         @if($project->pending_payment !== 0 and $project->paid_payment !== $project->cost)
-                                            <a href="{{url("/admin/accounting/customer-payments/$project->id/create")}}" title="pay" class="btn btn-sm btn-warning"><i class="fas fa-money-bill-wave"></i></a>
+                                            <a href="{{url("/admin/accounting/projects/$project->id/customer-payments/create")}}" title="pay" class="btn btn-sm btn-warning"><i class="fas fa-money-bill-wave"></i></a>
                                         @endif
                                     @endif
                                     <a href="{{url("/admin/accounting/projects/$project->id/inspect")}}" title="inspect" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a>

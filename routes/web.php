@@ -77,9 +77,10 @@ Route::prefix('admin')->middleware(["is_admin"])->group(function () {
         Route::prefix("/projects")->name("projects.")->group(function (){
             Route::post("/cancel",[ProjectController::class,"cancel"])->name("cancel");
             Route::get("/{id}/inspect",[ProjectController::class,"inspect"])->name("inspect");
+            Route::prefix("/{project}")->group(function (){
+                Route::resource("customer-payments",CustomerPaymentController::class)->except(["show","edit","update"]);
+            });
         });
-
-        Route::resource("customer-payments",CustomerPaymentController::class)->except(["edit","update"]);
 
         Route::resource("suppliers",SupplierController::class)->except("destroy");
         Route::get("/suppliers/{id}/inspect",[SupplierController::class,"inspect"])->name("suppliers.inspect");
