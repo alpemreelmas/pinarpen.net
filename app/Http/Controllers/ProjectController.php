@@ -53,27 +53,12 @@ class ProjectController extends Controller
             return redirect()->back()->withErrors("Böyle bir tedarikçi bulunamadı. Lütfen daha sonra tekrar deneyiniz.");
         }
 
-
-
         DB::transaction(function() use ($request) {
-            $project = new Project();
-            $project->customer_id = $request->customer_id;
-            $project->supplier_id = $request->supplier_id;
-            $project->material_type = $request->material_type;
-            $project->material_amount = (int)$request->material_amount;
-            $project->payment_type = $request->payment_type;
-            $project->unit_price_of_material = (float)$request->unit_price_of_material;
-            $project->square_meters = (float)$request->square_meters;
-            $project->earning = (int)$request->earning;
-
-            $project->note = $request->note ? $request->note : null;
-
+            $project = new Project($request->validated());
             $expenditure = ((float)((float)$request->unit_price_of_material*(float)$request->square_meters)*(int)$request->material_amount);
-
-            $project->cost = $expenditure+(int)$request->earning;
-            $project->pending_payment =  $project->cost;
-            $project->paid_payment = 0;
-            $project->pay_date = $request->pay_date;
+            $cost = $expenditure + (int)$request->earning;
+            $project->cost = $cost;
+            $project->pending_payment = $cost;
             $project->save();
 
             if($request->is_stock == "false"){

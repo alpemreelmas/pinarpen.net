@@ -2,12 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+      "customer_id",
+      "supplier_id",
+      "material_type",
+      "material_amount",
+      "payment_type",
+      "unit_price_of_material",
+      "square_meters",
+      "earning",
+      "note",
+      "cost",
+      "pending_payment",
+      "paid_payment",
+      "pay_date",
+    ];
+
+    protected $casts = [
+      "material_amount"=>"integer",
+      "earning"=>"integer",
+      "unit_price_of_material"=>"float",
+      "square_meters"=>"float",
+    ];
+
 
     public function getCustomer()
     {

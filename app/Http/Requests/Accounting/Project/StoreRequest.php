@@ -32,7 +32,10 @@ class StoreRequest extends FormRequest
             "supplier_id"=>"required",
             "unit_price_of_material"=>"required|numeric|min:0.1",
             "square_meters"=>"required|min:0.1|numeric",
-            "is_stock"=>"required"
+            "is_stock"=>"required",
+            "earning" => "required|min:0|numeric",
+            "pay_date" => "required",
+            "note" => "nullable|string",
         ];
     }
 }
