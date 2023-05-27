@@ -41,7 +41,7 @@
                         <tr>
                             <td>{{$supplier->name}}</td>
                             <td>{{$supplier->material_type}}</td>
-                            <td>TR{{$supplier->iban}}<button class="btn btn-outline-info float-right copyToClipboard fas fa-copy"  iban="TR{{$supplier->iban}}"></button></td>
+                            <td>TR{{$supplier->iban}}<button class="btn btn-outline-info float-right copyToClipboard fas fa-copy" iban="TR{{$supplier->iban}}"></button></td>
                             <td class="d-flex flex-row justify-content-around">
                                 <a href="{{url("/admin/accounting/suppliers/$supplier->id/edit")}}" title="Edit" class="btn btn-sm btn-primary" id="editBtn"><i class="fa fa-pen"></i></a>
                                 <a href="{{url("/admin/accounting/suppliers/$supplier->id/inspect")}}" title="İncele" class="btn btn-sm btn-secondary"><i class="fa fa-eye"></i></a>

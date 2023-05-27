@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\CustomerPayment\StoreRequest;
 use App\Models\Customer;
 use App\Models\CustomerPayment;
 use App\Models\Portfolio;
@@ -17,76 +18,50 @@ class CustomerPaymentController extends Controller
         return view("management_panel.accounting.customer_payments.index",compact("customer_payments"));
     }
 
-    public function create($id)
+    public function create(Project $project)
     {
         $customers = Customer::select("name","surname")->get();
+        // TODO let's check here to make just sql query instead of calculating this with for loop
         for($i = 0;$i < $customers->count(); $i++){
             $customers[$i]->value = $customers[$i]->name." ". $customers[$i]->surname;
         }
-        $project = Project::whereId($id)->whereColumn("paid_payment", "!=" ,"cost")->firstOrFail();
-
         if($project->is_cancelled){
             return redirect()->back()->withErrors("Bu proje iptal edildiği için ödeme yapılamaz.");
         }
+        $project->cost == $project->paid_payment ?? redirect()->back()->withErrors("Bu projeye ödeme yapılamaz");
 
         return view("management_panel.accounting.customer_payments.create",compact("customers","project"));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request,Project $project)
     {
-        $request->validate([
-            "project_id"=>"required",
-            "amount"=>"required",
-            "payer_name"=>"required",
-        ],[
-          "project_id.required"=>"Bir hata meydana geldi lütfen daha sonra tekrar deneyiniz.",
-          "amount.required"=>"Lütfen geçerli bir fatura tutarı giriniz.",
-          "payer_name"=>"Lütfen ödeyen adını ekleyiniz."
-        ]);
-
-        $project = Project::whereId($request->project_id)->whereColumn("paid_payment", "!=" ,"cost")->firstOrFail();
-
-        if($request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen ödeme miktarını kontrol ediniz.");
-        }
-
         if($project->pending_payment < $request->amount){
             return redirect()->back()->withErrors("Borcu kapamak için ödenmesi gereken tutardan fazla tutar yatırıldı. İşleminiz iptal edilmiştir. Uygun tutar giriniz.");
         }
 
         DB::transaction(function() use ($request,$project) {
 
-            $customer_payment = new CustomerPayment();
-            $customer_payment->project_id = $project->id;
-            $customer_payment->amount = (int)$request->amount;
-            $customer_payment->payer = $request->payer_name;
-            $customer_payment->save();
+            $validated = array_merge($request->validated(),["project_id"=>$project->id]);
+            CustomerPayment::create($validated);
 
             $project->pending_payment-=(int)$request->amount;
             $project->paid_payment+=(int)$request->amount;
             $project->save();
         });
 
-        return redirect("/admin/accounting/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
 
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request, Project $project, CustomerPayment $customerPayment)
     {
-        $customer_payment = CustomerPayment::whereId($request->id)->firstOrFail();
-        //TODO kısa yolu var mı kontrol et.
-        $project = Project::whereId($customer_payment->project_id)->firstOrFail();
-        DB::transaction(function() use ($request,$project,$customer_payment) {
-
-            $project->pending_payment+=(int)$customer_payment->amount;
-            $project->paid_payment-=(int)$customer_payment->amount;
+        DB::transaction(function() use ($request,$project,$customerPayment) {
+            $project->pending_payment+=(int)$customerPayment->amount;
+            $project->paid_payment-=(int)$customerPayment->amount;
             $project->save();
-
-
-            $customer_payment->delete();
-
+            $customerPayment->delete();
         });
 
-        return redirect("/admin/accounting/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
     }
 }

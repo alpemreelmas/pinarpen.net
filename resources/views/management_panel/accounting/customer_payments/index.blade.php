@@ -7,18 +7,7 @@
             <h6 class="m-0 font-weight-bold text-primary">{{$customer_payments->count()}} tane müşteri ödemesi bulundu.</h6>
         </div>
         <div class="card-body">
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    @foreach($errors->all() as $error)
-                        <li>{{$error}}</li>
-                    @endforeach
-                </div>
-            @endif
-            @if(Session::get("success"))
-                <div class="alert alert-success">
-                    {{Session::get("success")}}
-                </div>
-            @endif
+            <x-flash-messages />
             <div class="table-responsive">
                 <table class="table table-bordered" id="table" width="100%" cellspacing="0">
                     <thead>
@@ -112,21 +101,14 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type:"POST",
-                        url:"{{url("/admin/accounting/customer-payments/")}}/"+delete_id,
+                        url:"{{url("/admin/accounting/projects/$customer_payment->project_id/customer-payments/")}}/"+delete_id,
                         data:{
                             "_token":"{{csrf_token()}}",
                             "id":delete_id,
                             "_method":"DELETE"
                         },
                         success:function () {
-                            new swal(
-                                'Başarılı!',
-                                'Taksit ödemesi başarılı bir şekilde silindi. Sayfa 3 saniye içinde yenilenecektir.',
-                                'success'
-                            )
-                            setTimeout(function () {
-                                location.reload()
-                            },3000)
+                            location.reload()
                         }
                     })
                 }

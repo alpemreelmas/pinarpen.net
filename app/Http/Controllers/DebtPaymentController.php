@@ -82,7 +82,7 @@ class DebtPaymentController extends Controller
 
     }
 
-    public function delete(Request $request)
+    public function destroy(Request $request)
     {
         $debt_payment = DebtPayment::whereId($request->id)->firstOrFail();
         //TODO kısa yolu var mı kontrol et.

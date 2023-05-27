@@ -19,7 +19,7 @@
                         {{Session::get("success")}}
                     </div>
                 @endif
-                <form method="POST" action="{{url("/admin/accounting/projects/")}}">
+                <form method="POST" action="{{url("/admin/accounting/projects")}}">
                     @csrf
                     <div class="form-group">
                         <label for="costumer_id">Müşteri</label><br/>
