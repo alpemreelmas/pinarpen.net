@@ -20,25 +20,14 @@ class ExpenditureController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "amount"=>"required|numeric"
-        ],[
-            "name.required"=>"Gider adı kısmı zorunludur.",
-            "amount.required"=>"Gider miktarı kısmı zorunludur.",
-            "amount.numeric"=>"Gider miktarı kısmı sayı olmak zorundadır.",
-        ]);
 
         if((float)$request->amount <= 0){
             return redirect()->back()->withErrors("Lütfen 0'dan yüksek bir tutar giriniz.");
         }
 
-        $expenditure = new Expenditure();
-        $expenditure->name = $request->name;
-
-        $expenditure->amount = (float)$request->amount;
-        $expenditure->detail = $request->amount ? $request->detail : null;
-        $expenditure->save();
+        DB::transaction(function() use ($request) {
+            Expenditure::create($request->validate());
+        });
 
 
 
@@ -51,22 +40,12 @@ class ExpenditureController extends Controller
         return view("management_panel.accounting.expenditures.edit",compact("expenditure"));
     }
 
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "amount"=>"required|numeric"
-        ],[
-            "name.required"=>"Gider adı kısmı zorunludur.",
-            "amount.required"=>"Gider miktarı kısmı zorunludur.",
-            "amount.numeric"=>"Gider miktarı kısmı sayı olmak zorundadır.",
-        ]);
 
-        $expenditure = Expenditure::where("id",$request->id)->firstOrFail();
-        $expenditure->name = $request->name;
-        $expenditure->amount = (float)$request->amount;
-        $expenditure->detail = $request->amount ? $request->detail : null;
-        $expenditure->save();
+        DB::transaction(function() use ($request, $id) {
+            Expenditure::update($request->validate());
+        });
 
         return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider güncellenmiştir.");
     }

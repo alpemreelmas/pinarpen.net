@@ -93,6 +93,7 @@ Route::prefix('admin')->middleware(["is_admin"])->group(function () {
 
         Route::resource("debt-payments",DebtPaymentController::class)->except(["edit","update"]);
         Route::resource("expenditures",ExpenditureController::class);
+        Route::get("/expenditures/{id}", [ExpenditureController::class, "update"]);
     });
 });
 

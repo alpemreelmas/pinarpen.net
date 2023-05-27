@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\DebtPayment\StoreRequest;
 use App\Models\DebtPayment;
 use App\Models\Debt;
 use Illuminate\Http\Request;
@@ -40,19 +41,8 @@ class DebtPaymentController extends Controller
         return view("management_panel.accounting.debt_payments.create",compact("debt"));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            "payer_name"=>"required",
-            "payer_surname"=>"required",
-            "amount"=>"required",
-            "debt_id"=>"required",
-        ],[
-            "payer_name.required"=>"Lütfen kimin ödediğini yazınız.",
-            "payer_surname.required"=>"Lütfen kimin ödediğini yazınız.",
-            "debt_id.required"=>"Bir hata meydana geldi lütfen tekrar deneyiniz.",
-            "amount.required"=>"Lütfen bir borç tutarı giriniz."
-        ]);
 
         if($request->amount <= 0){
             return redirect()->back()->withErrors("Lütfen ödeme miktarını kontrol ediniz.");
@@ -65,16 +55,9 @@ class DebtPaymentController extends Controller
         }
 
         DB::transaction(function () use ($request,$debt){
-
+            DebtPayment::create($request->validated());
             $debt->pending_payment -= (float)$request->amount;
             $debt->paid_payment += (float)$request->amount;
-
-            $debt_payment = new DebtPayment();
-            $debt_payment->payer_name = $request->payer_name;
-            $debt_payment->payer_surname = $request->payer_surname;
-            $debt_payment->amount = $request->amount;
-            $debt_payment->debt_id = $debt->id;
-            $debt_payment->save();
             $debt->save();
         });
 
@@ -85,7 +68,6 @@ class DebtPaymentController extends Controller
     public function destroy(Request $request)
     {
         $debt_payment = DebtPayment::whereId($request->id)->firstOrFail();
-        //TODO kısa yolu var mı kontrol et.
         $debt = Debt::whereId($debt_payment->debt_id)->firstOrFail();
         DB::transaction(function() use ($request,$debt,$debt_payment) {
 
