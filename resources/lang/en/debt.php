@@ -18,4 +18,10 @@ return [
     'bulk_payment_error'=>'There is no debt available for bulk payment.',
     'less_than_0'=>'Please try making a payment with a number greater than 0.',
     'bulk_overpayment'=>'You are attempting to make an overpayment on your bulk debt.',
+    'excessive_amount'=>'An amount greater than the required payment has been deposited to settle the debt. Your transaction has been canceled. Please enter the appropriate amount.',
+    'success_debt_restructured'=>'The debt has been successfully restructured.',
+    'overpayment_debt'=>'You are attempting to make a debt payment that exceeds the remaining balance.',
+    'check_payment_amount'=>'Please check the payment amount.',
+    'payment_successfully'=>'The payment has been successfully made.',
+
 ];

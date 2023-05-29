@@ -45,13 +45,13 @@ class DebtPaymentController extends Controller
     {
 
         if($request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen ödeme miktarını kontrol ediniz.");
+            return redirect()->back()->withErrors(trans('debt.check_payment_amount'));
         }
 
         $debt = Debt::where("id",$request->debt_id)->where("pending_payment",">",0)->firstOrFail();
 
         if($debt->pending_payment < $request->amount){
-            return redirect()->back()->withErrors("Kalan borç tutarından fazla borç ödemesi yapmaya çalışıyorsunuz. Yapılabilecek en fazla tutar ".$debt->pending_payment."TL'dir.");
+            return redirect()->back()->withErrors(trans('debt.overpayment_debt'));
         }
 
         DB::transaction(function () use ($request,$debt){
@@ -61,7 +61,7 @@ class DebtPaymentController extends Controller
             $debt->save();
         });
 
-        return redirect("/admin/accounting/debt-payments")->with("success","Başarılı bir şekilde ödeme yapılmıştır.");
+        return redirect("/admin/accounting/debt-payments")->with("success",trans('debt.payment_successfully'));
 
     }
 
@@ -80,6 +80,6 @@ class DebtPaymentController extends Controller
 
         });
 
-        return redirect("/admin/accounting/debt-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/debt-payments")->with("success",trans('debt.success_debt_restructured'));
     }
 }

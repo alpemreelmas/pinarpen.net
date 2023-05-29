@@ -22,7 +22,7 @@ class ExpenditureController extends Controller
     {
 
         if((float)$request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen 0'dan yüksek bir tutar giriniz.");
+            return redirect()->back()->withErrors(trans('expenditure.higher_than_0'));
         }
 
         DB::transaction(function() use ($request) {
@@ -31,7 +31,7 @@ class ExpenditureController extends Controller
 
 
 
-        return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider eklenmiştir.");
+        return redirect("admin/accounting/expenditures")->with("success",trans('expenditure.expenditure_added'));
     }
 
     public function edit($id)
@@ -47,7 +47,7 @@ class ExpenditureController extends Controller
             Expenditure::update($request->validate());
         });
 
-        return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider güncellenmiştir.");
+        return redirect("admin/accounting/expenditures")->with("success",trans('expenditure.expenditure_updated'));
     }
 
     public function destroy(Request $request){
@@ -56,7 +56,7 @@ class ExpenditureController extends Controller
         $expenditure = Expenditure::whereId($request->id)->firstOrFail();
         $expenditure->delete();
 
-        return redirect()->back()->with("success","Gider başarılı bir şekilde silinmiştir.");
+        return redirect()->back()->with("success",trans('expenditure.expenditure_deleted'));
     }
 
 

@@ -70,7 +70,7 @@ class adminController extends Controller
         if(Auth::attempt(['email'=>$email,'password'=>$password])){
             return redirect('/admin/dashboard');
         }
-        return redirect()->back()->withErrors('Lütfen bilgilerinizi kontrol ediniz.');
+        return redirect()->back()->withErrors(trans("auth.failed"));
     }
 
     public function logout(){

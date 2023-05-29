@@ -26,4 +26,6 @@ return [
     'inspect_customer_activity'=>'You are inspecting :name activities',
     'all_debt_to_us'=>'Status of customer debts',
     'already_exist'=>':name already exist',
+    'canceled_project_payment'=>'Payment cannot be made as this project has been canceled.',
+    'cant_pay_project'=>'This project cannot be paid',
 ];
