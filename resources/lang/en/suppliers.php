@@ -13,8 +13,6 @@ return [
     |
     */
 
-    'operations' => 'Operations',
-    'there_is_no_record'=>'There is no record',
-    'complete'=>'Complete',
-    'successful'=>'Your transaction has been successfully completed.',
+    'already_exist'=>':name already exist',
+    'iban_error'=>'Please make sure that the IBAN is entered with 24 digits, excluding the TR part.'
 ];

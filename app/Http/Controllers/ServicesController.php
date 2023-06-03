@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\Services\StoreRequest;
+use App\Http\Requests\Accounting\Services\UpdateRequest;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Http\File;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -23,34 +26,22 @@ class servicesController extends Controller
        return view('management_panel.services.create')->render();
    }
 
-   public function store(Request $request)
+   public function store(StoreRequest $request)
    {
-        $request->validate([
-            "name"=>"required",
-            "image"=>"required|mimes:jpg,jpeg,png",
-            "spec"=>"required",
-        ],
-        [
-            "name.required" => "İsim alanı zorunludur.",
-            "spec.required" => "Özellikler alanı zorunludur.",
-            "image.required" => "Resim alanı zorunludur.",
-            "image.mimes" => "Resim jpeg, png, jpg türünden biri olmak zorundadır.",
-        ]);
+       DB::transaction(function() use ($request) {
+           $service = new Service($request->validated());
+           $service->slug = Str::slug($request->name);
 
-        $service = new Service();
-        $service->name = $request->name;
-        $service->slug = Str::slug($request->name);
-        $service->spec = $request->spec;
+           if ($request->hasFile('image')) {
+               $newImageName = Str::uuid() . "." . $request->file("image")->extension();
+               $request->file("image")->move(public_path("img/services"), $newImageName);
+               $service->image = $newImageName;
+           }
 
-        if($request->hasFile('image')){
-            $newImageName = Str::uuid().".".$request->file("image")->extension();
-            $request->file("image")->move(public_path("img/services"),$newImageName);
-            $service->image = $newImageName;
-        }
+           $service->save();
+       });
 
-        $service->save();
-
-        return redirect("/admin/services")->with("success","Hizmet başarılı bir şekilde kayıt edilmiştir.");
+        return redirect("/admin/services")->with("success",trans("general.Successful"));
 
     }
 
@@ -60,39 +51,28 @@ class servicesController extends Controller
         return view("management_panel.services.edit",compact("service"));
     }
 
-    public function update($id, Request $request){
-        $request->validate([
-            "name"=>"required",
-            "spec"=>"required",
-            "image"=>"nullable|mimes:jpg,jpeg,png",
-        ],
-        [
-            "name.required" => "İsim alanı zorunludur.",
-            "spec.required" => "Özellikler alanı zorunludur.",
-            "image.required" => "Resim alanı zorunludur.",
-            "image.mimes" => "Resim jpeg, png, jpg türünden biri olmak zorundadır.",
-        ]);
+    public function update($id, UpdateRequest $request){
 
-        $service = Service::findOrFail($id);
-        $service->name = $request->name;
-        $service->slug = Str::slug($request->name);
-        $service->spec = $request->spec;
+        DB::transaction(function() use ($request) {
+            $service = Service::findOrFail($id);
+            $service->slug = Str::slug($request->name);
 
 
-        $service->slug = Str::slug($request->name);
+            $service->slug = Str::slug($request->name);
 
-        if($request->hasFile('image')){
-            if(!unlink(public_path("img/services/".$service->image))){
-                return redirect()->back()->withErrors("Dosya silinemedi.");
+            if ($request->hasFile('image')) {
+                if (!unlink(public_path("img/services/" . $service->image))) {
+                    return redirect()->back()->withErrors("Dosya silinemedi.");
+                }
+                $newImageName = Str::uuid() . "." . $request->file("image")->extension();
+                $request->file("image")->move(public_path("img/services"), $newImageName);
+                $service->image = $newImageName;
             }
-            $newImageName = Str::uuid().".".$request->file("image")->extension();
-            $request->file("image")->move(public_path("img/services"),$newImageName);
-            $service->image = $newImageName;
-        }
 
-        $service->save();
+            $service->save();
+        });
 
-        return redirect("/admin/services")->with("success","Hizmet başarılı bir şekilde güncellenmiştir.");
+        return redirect("/admin/services")->with("success",trans("general.Successful"));
     }
 
     public function delete(Request $request)
@@ -104,7 +84,7 @@ class servicesController extends Controller
         }
 
         $service->delete();
-        return redirect()->back()->with("success","Hizmet başarılı bir şekilde silinmiştir.");
+        return redirect()->back()->with("success",trans("general.Successful"));
     }
 
 }

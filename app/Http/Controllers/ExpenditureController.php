@@ -20,29 +20,18 @@ class ExpenditureController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "amount"=>"required|numeric"
-        ],[
-            "name.required"=>"Gider adı kısmı zorunludur.",
-            "amount.required"=>"Gider miktarı kısmı zorunludur.",
-            "amount.numeric"=>"Gider miktarı kısmı sayı olmak zorundadır.",
-        ]);
 
         if((float)$request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen 0'dan yüksek bir tutar giriniz.");
+            return redirect()->back()->withErrors(trans('expenditure.higher_than_0'));
         }
 
-        $expenditure = new Expenditure();
-        $expenditure->name = $request->name;
-
-        $expenditure->amount = (float)$request->amount;
-        $expenditure->detail = $request->amount ? $request->detail : null;
-        $expenditure->save();
+        DB::transaction(function() use ($request) {
+            Expenditure::create($request->validate());
+        });
 
 
 
-        return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider eklenmiştir.");
+        return redirect("admin/accounting/expenditures")->with("success",trans('expenditure.expenditure_added'));
     }
 
     public function edit($id)
@@ -51,24 +40,14 @@ class ExpenditureController extends Controller
         return view("management_panel.accounting.expenditures.edit",compact("expenditure"));
     }
 
-    public function update(Request $request)
+    public function update($id, Request $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "amount"=>"required|numeric"
-        ],[
-            "name.required"=>"Gider adı kısmı zorunludur.",
-            "amount.required"=>"Gider miktarı kısmı zorunludur.",
-            "amount.numeric"=>"Gider miktarı kısmı sayı olmak zorundadır.",
-        ]);
 
-        $expenditure = Expenditure::where("id",$request->id)->firstOrFail();
-        $expenditure->name = $request->name;
-        $expenditure->amount = (float)$request->amount;
-        $expenditure->detail = $request->amount ? $request->detail : null;
-        $expenditure->save();
+        DB::transaction(function() use ($request, $id) {
+            Expenditure::update($request->validate());
+        });
 
-        return redirect("admin/accounting/expenditures")->with("success","Başarılı bir şekilde genel gider güncellenmiştir.");
+        return redirect("admin/accounting/expenditures")->with("success",trans('expenditure.expenditure_updated'));
     }
 
     public function destroy(Request $request){
@@ -77,7 +56,7 @@ class ExpenditureController extends Controller
         $expenditure = Expenditure::whereId($request->id)->firstOrFail();
         $expenditure->delete();
 
-        return redirect()->back()->with("success","Gider başarılı bir şekilde silinmiştir.");
+        return redirect()->back()->with("success",trans('expenditure.expenditure_deleted'));
     }
 
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Accounting\Customer;
+namespace App\Http\Requests\Accounting\Debt;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "title"=>"required|image|mimes:png,jpeg,jpg",
-            "content"=>"required",
-            "descriptions"=>"required",
-            "images" => "nullable|array",
-            "images.*" => "nullable|image|mimes:png,jpg,jpeg"
+            "supplier_id"=>"required",
+            "material_type"=>"required",
+            "unit_price_of_material"=>"required|numeric|min:0.1",
+            "square_meters"=>"required|min:0.1|numeric",
         ];
     }
 }

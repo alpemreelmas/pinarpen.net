@@ -47,7 +47,7 @@ class CustomerController extends Controller
         }
 
         DB::transaction(function() use ($request,$customer) {
-            Customer::update($request->validated());
+            $customer->update($request->validated());
         });
 
         return redirect("/admin/accounting/customers")->with("success",trans("general.successful"));

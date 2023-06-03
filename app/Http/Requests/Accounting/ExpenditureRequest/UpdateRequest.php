@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Accounting\Customer;
+namespace App\Http\Requests\Accounting\ExpenditureRequest;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,11 +24,8 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            "title"=>"required|image|mimes:png,jpeg,jpg",
-            "content"=>"required",
-            "descriptions"=>"required",
-            "images" => "nullable|array",
-            "images.*" => "nullable|image|mimes:png,jpg,jpeg"
+            "name"=>"required",
+            "amount"=>"required|numeric"
         ];
     }
 }

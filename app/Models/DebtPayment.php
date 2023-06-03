@@ -9,6 +9,17 @@ class DebtPayment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "payer_name",
+        "payer_surname",
+        "amount",
+        "dept_id"
+    ];
+
+    protected $casts = [
+      "amount"=>"float"
+    ];
+
     public function getSupplier()
     {
         return $this->belongsTo(Debt::class,"debt_id","id");

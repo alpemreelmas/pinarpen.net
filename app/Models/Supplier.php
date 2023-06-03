@@ -9,6 +9,12 @@ class Supplier extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "name",
+        "material_type ",
+        "iban"
+    ];
+
     public function getDebts(){
         return $this->hasMany(Debt::class,"supplier_id","id");
     }

@@ -26,9 +26,9 @@ class CustomerPaymentController extends Controller
             $customers[$i]->value = $customers[$i]->name." ". $customers[$i]->surname;
         }
         if($project->is_cancelled){
-            return redirect()->back()->withErrors("Bu proje iptal edildiği için ödeme yapılamaz.");
+            return redirect()->back()->withErrors(trans('customer.canceled_project_payment'));
         }
-        $project->cost == $project->paid_payment ?? redirect()->back()->withErrors("Bu projeye ödeme yapılamaz");
+        $project->cost == $project->paid_payment ?? redirect()->back()->withErrors(trans('customer.cant_pay_project'));
 
         return view("management_panel.accounting.customer_payments.create",compact("customers","project"));
     }
@@ -36,7 +36,7 @@ class CustomerPaymentController extends Controller
     public function store(StoreRequest $request,Project $project)
     {
         if($project->pending_payment < $request->amount){
-            return redirect()->back()->withErrors("Borcu kapamak için ödenmesi gereken tutardan fazla tutar yatırıldı. İşleminiz iptal edilmiştir. Uygun tutar giriniz.");
+            return redirect()->back()->withErrors(trans('customer.excessive_amount'));
         }
 
         DB::transaction(function() use ($request,$project) {
@@ -49,7 +49,7 @@ class CustomerPaymentController extends Controller
             $project->save();
         });
 
-        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success",trans('debt.success_debt_restructured'));
 
     }
 
@@ -62,6 +62,6 @@ class CustomerPaymentController extends Controller
             $customerPayment->delete();
         });
 
-        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/projects/$project->id/customer-payments")->with("success",trans('debt.success_debt_restructured'));
     }
 }

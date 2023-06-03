@@ -13,8 +13,8 @@ return [
     |
     */
 
-    'operations' => 'Operations',
-    'there_is_no_record'=>'There is no record',
-    'complete'=>'Complete',
-    'successful'=>'Your transaction has been successfully completed.',
+    'higher_than_0'=>'Please enter an amount higher than 0.',
+    'expenditure_added'=>'Successfully added expenditure.',
+    'expenditure_updated'=>'Successfully updated expenditure.',
+    'expenditure_deleted'=>'Successfully deleted expenditure.',
 ];

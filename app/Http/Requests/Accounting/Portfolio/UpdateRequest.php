@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Accounting\Customer;
+namespace App\Http\Requests\Accounting\Portfolio;
 
 use Illuminate\Foundation\Http\FormRequest;
 
