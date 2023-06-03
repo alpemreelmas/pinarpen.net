@@ -15,5 +15,5 @@ return [
     'operations' => 'İşlemler',
     'there_is_no_record'=>'Kayıt bulunmamaktadır',
     'complete'=>'Tamamla',
-    'successful'=>'Başarılı',
+    'successful'=>'İşleminiz başarılı bir şekilde gerçekleşmiştir',
 ];

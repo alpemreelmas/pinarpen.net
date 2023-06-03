@@ -16,5 +16,5 @@ return [
     'operations' => 'Operations',
     'there_is_no_record'=>'There is no record',
     'complete'=>'Complete',
-    'successful'=>'Successful',
+    'successful'=>'Your transaction has been successfully completed.',
 ];
