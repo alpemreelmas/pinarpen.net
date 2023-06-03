@@ -43,7 +43,7 @@ class portfoliosController extends Controller
     public function store(StoreRequest $request)
     {
         DB::transaction(function() use ($request) {
-            $portfolio = new Portfolio();
+            $portfolio = new Portfolio($request->validated());
 
             if ($request->hasFile('title_image')) {
                 $newImageName = Str::uuid() . "." . $request->file("title_image")->extension();
@@ -72,10 +72,8 @@ class portfoliosController extends Controller
      * @param  \App\Models\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Portfolio $portfolio)
     {
-        $portfolio = Portfolio::where("id",$id)->firstOrFail();
-
         return view("management_panel.portfolios.edit",compact("portfolio"));
     }
 
@@ -86,10 +84,10 @@ class portfoliosController extends Controller
      * @param  \App\Models\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $request, Portfolio $portfolio, $id)
+    public function update(UpdateRequest $request, Portfolio $portfolio)
     {
-        DB::transaction(function() use ($request) {
-            $portfolio = new Portfolio($request->validated());
+        DB::transaction(function() use ($request,$portfolio) {
+            $portfolio->update($request->validated());
             if ($request->hasFile('title_image')) {
                 unlink(public_path("img/portfolios/" . $portfolio->title_image));
                 $newImageName = Str::uuid() . "." . $request->file("title_image")->extension();
@@ -124,11 +122,8 @@ class portfoliosController extends Controller
      * @param  \App\Models\Portfolio  $portfolio
      * @return \Illuminate\Http\Response
      */
-    public function delete(Request $request)
+    public function destroy(Request $request, Portfolio $portfolio)
     {
-        $request->validate(["id"=>"required"]);
-        $portfolio = Portfolio::findOrFail($request->id);
-
         unlink(public_path("img/portfolios/".$portfolio->title_image));
         foreach($portfolio->getGallery as $image){
             unlink(public_path("img/portfolios/".$image->url));

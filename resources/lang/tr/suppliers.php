@@ -14,5 +14,9 @@ return [
     */
 
     'already_exist'=>':name zaten mevcut',
+    'supplier'=>'Tedarikçi',
+    'pay_supplier_debt'=>'Tedarikçi borcu öde',
+    'choose_supplier'=>'Tedarikçi Seçiniz',
+    'add_collective_payment'=>'Toplu Tedarikçi Borcu Öde',
     'iban_error'=>'Lütfen ibanın TR kısmı hariç 24 hane olacak şekilde girildiğinden emin olunuz.'
 ];

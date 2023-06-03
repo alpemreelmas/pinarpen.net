@@ -51,15 +51,15 @@ class SupplierController extends Controller
         return view("management_panel.accounting.suppliers.edit",compact("supplier"));
     }
 
-    public function update($id, Request $request)
+    public function update(Supplier $supplier, UpdateRequest $request)
     {
 
-        if(Supplier::where("name",$request->name)->whereNotIn("id",[$id])->first()){
+        if(Supplier::where("name",$request->name)->whereNotIn("id",[$supplier->id])->first()){
             return redirect()->back()->withErrors(trans("supplier.already_exist",["name"=>$request->name]));
         }
 
-        DB::transaction(function() use ($request,$id) {
-            Supplier::update($request->validated());
+        DB::transaction(function() use ($request,$supplier) {
+            $supplier->update($request->validated());
         });
 
         return redirect("/admin/accounting/suppliers/")->with("success",trans("general.successful"));

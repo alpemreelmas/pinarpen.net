@@ -16,10 +16,10 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => "Enes",
-            'email' => "beyazenespinar@gmail.com",
+            'name' => "Admin",
+            'email' => "admin@admin.com",
             'email_verified_at' => now(),
-            'password' => Hash::make('EaKlmt76prs'),
+            'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }

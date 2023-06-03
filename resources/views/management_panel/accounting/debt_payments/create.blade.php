@@ -1,5 +1,5 @@
 @extends('management_panel.layouts.master')
-@section('title','Tedarikçi Borcu Öde')
+@section('title',__("suppliers.pay_supplier_debt"))
 @section('content')
     <div class="container-fluid">
         <div class="card shadow mb-4">
@@ -22,20 +22,20 @@
                 <form method="POST" action="{{url("/admin/accounting/debt-payments/")}}">
                     @csrf
                     <div class="form-group">
-                        <label for="payer_name">Ödeyen Adı</label><br/>
+                        <label for="payer_name">{{__("customer.payer_name")}}</label><br/>
                         <input id="payer_name" name="payer_name" class="form-control" type="text" value="{{old("payer_name")}}" required>
                         <input name="debt_id" class="form-control" type="hidden" value="{{$debt->id}}" required>
                     </div>
                     <div class="form-group">
-                        <label for="payer_surname">Ödeyen Soyadı</label><br/>
+                        <label for="payer_surname">{{__("customer.payer_surname")}}</label><br/>
                         <input id="payer_surname" name="payer_surname" class="form-control" type="text" value="{{old("payer_surname")}}" required>
                     </div>
                     <div class="form-group">
-                        <label for="amount">Ödeme Miktarı</label><br/>
+                        <label for="amount">{{__("customer.payment_amount")}}</label><br/>
                         <input id="amount" name="amount" class="form-control" type="number" step="0.01" min="0.01" value="{{old("amount")}}" required>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Ödeme Ekle</button>
+                        <button type="submit" class="btn btn-primary btn-block">{{__("customer.payment_add")}}</button>
                     </div>
                 </form>
             </div>

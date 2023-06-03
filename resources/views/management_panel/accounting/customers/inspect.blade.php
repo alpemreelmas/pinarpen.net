@@ -31,22 +31,22 @@
                             <table class="table table-bordered" id="ProjectTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <td>Malzeme Türü</td>
-                                    <td>Ödenmiş Tutar</td>
-                                    <td>Ödenmesi Gereken Tutar</td>
-                                    <td>Fatura Kesim Tarihi</td>
-                                    <td>Ödeme Yöntemi</td>
-                                    <td>Proje Başlangıç Tarihi</td>
+                                    <td>{{__("customer.type_of_material")}}</td>
+                                    <td>{{__("customer.paid_amount")}}</td>
+                                    <td>{{__("customer.must_to_be_paid")}}</td>
+                                    <td>{{__("customer.billing_date")}}</td>
+                                    <td>{{__("customer.type_of_payment")}}</td>
+                                    <td>{{__("customer.start_date_of_project")}}</td>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <td>Malzeme Türü</td>
-                                    <td>Ödenmiş Tutar</td>
-                                    <td>Ödenmesi Gereken Tutar</td>
-                                    <td>Fatura Kesim Tarihi</td>
-                                    <td>Ödeme Yöntemi</td>
-                                    <td>Proje Başlangıç Tarihi</td>
+                                    <td>{{__("customer.type_of_material")}}</td>
+                                    <td>{{__("customer.paid_amount")}}</td>
+                                    <td>{{__("customer.must_to_be_paid")}}</td>
+                                    <td>{{__("customer.billing_date")}}</td>
+                                    <td>{{__("customer.type_of_payment")}}</td>
+                                    <td>{{__("customer.start_date_of_project")}}</td>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -67,18 +67,18 @@
                             <table class="table table-bordered" id="TransactionTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <td>Ödeyen Kişinin Adı</td>
-                                    <td>Ödeme Tutarı</td>
-                                    <td>Ödeme Yaptığı Proje</td>
-                                    <td>Ödeme Tarihi</td>
+                                    <td>{{__("customer.payer_name")}}</td>
+                                    <td>{{__("customer.payment_amount")}}</td>
+                                    <td>{{__("customer.paid_project")}}</td>
+                                    <td>{{__("customer.payment_date")}}</td>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <td>Ödeyen Kişinin Adı</td>
-                                    <td>Ödeme Tutarı</td>
-                                    <td>Ödeme Yaptığı Proje</td>
-                                    <td>Ödeme Tarihi</td>
+                                    <td>{{__("customer.payer_name")}}</td>
+                                    <td>{{__("customer.payment_amount")}}</td>
+                                    <td>{{__("customer.paid_project")}}</td>
+                                    <td>{{__("customer.payment_date")}}</td>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -105,7 +105,7 @@
             $('#ProjectTable').DataTable({
                 dom: 'Bfrtip',
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json"
                 },
                 buttons: [
                     {
