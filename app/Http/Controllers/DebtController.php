@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\Debt\Collective_pay_postRequest;
+use App\Http\Requests\Accounting\Debt\StoreRequest;
 use App\Models\Debt;
 use App\Models\DebtPayment;
 use App\Models\Project;
@@ -26,40 +28,18 @@ class DebtController extends Controller
         return view("management_panel.accounting.debts.create",compact("suppliers"));
     }
 
-    public function store(Request $request){
-        $request->validate([
-            "supplier_id"=>"required",
-            "material_type"=>"required",
-            "unit_price_of_material"=>"required|numeric|min:0.1",
-            "square_meters"=>"required|min:0.1|numeric",
-        ],[
-            "supplier_id.required"=>"Bir hata meydana geldi lütfen daha sonra tekrar deneyiniz.",
-            "material_type.required"=>"Lütfen materyal türünü seçiniz.",
-            "unit_price_of_material.required"=>"Lütfen materyalin birim ücretini giriniz.",
-            "unit_price_of_material.numeric"=>"Materyalin birim fiyatını sayı olarak giriniz.",
-            "square_meters.numeric"=>"Metrekare alanını sayı olarak olacak şeklinde doldurunuz.",
-            "square_meters.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "unit_price_of_material.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "square_meters.required"=>"Lütfen metrekare alanınını boş bırakmayınız.",
-        ]);
+    public function store(StoreRequest $request){
 
         DB::transaction(function() use ($request) {
-            $debts = new Debt();
-            $debts->supplier_id = $request->supplier_id;
-            $debts->material_type = $request->material_type;
-            $debts->unit_price_of_material = (float)$request->unit_price_of_material;
-            $debts->square_meters = (float)$request->square_meters;
-            $debts->material_amount = (int)$request->material_amount;
-
+            $debts = new Debt($request->validated());
             $cost = ((float)$request->unit_price_of_material)*((float)$request->square_meters)*(int)$request->material_amount;
             $debts->cost = $cost;
             $debts->pending_payment = $cost;
             $debts->paid_payment = 0;
             $debts->save();
-
         });
 
-        return redirect("/admin/accounting/debts")->with("success","Tedarikçi borcu eklendi.");
+        return redirect("/admin/accounting/debts")->with("success",trans("general.successful"));
     }
 
     public function edit($id){
@@ -68,44 +48,18 @@ class DebtController extends Controller
         return view("management_panel.accounting.debts.edit",compact("suppliers","debt"));
     }
 
-    public function update($id,Request $request){
-        $request->validate([
-            "supplier_id"=>"required",
-            "material_type"=>"required",
-            "unit_price_of_material"=>"required|numeric|min:0.1",
-            "square_meters"=>"required|min:0.1|numeric",
-        ],[
-            "supplier_id.required"=>"Bir hata meydana geldi lütfen daha sonra tekrar deneyiniz.",
-            "material_type.required"=>"Lütfen materyal türünü seçiniz.",
-            "unit_price_of_material.required"=>"Lütfen materyalin birim ücretini giriniz.",
-            "unit_price_of_material.numeric"=>"Materyalin birim fiyatını sayı olarak giriniz.",
-            "square_meters.numeric"=>"Metrekare alanını sayı olarak olacak şeklinde doldurunuz.",
-            "square_meters.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "unit_price_of_material.min"=>"Metrekare alanını en az :size olacak şekilde doldurunuz.",
-            "square_meters.required"=>"Lütfen metrekare alanınını boş bırakmayınız.",
-        ]);
+    public function update($id,StoreRequest $request){
 
         $debt = Debt::whereId($id)->firstOrFail();
 
         if($debt->pending_payment == $debt->cost && $debt->paid_payment == 0){
             DB::transaction(function() use ($request,$debt) {
-                $debt->supplier_id = $request->supplier_id;
-                $debt->material_type = $request->material_type;
-                $debt->unit_price_of_material = (float)$request->unit_price_of_material;
-                $debt->square_meters = (float)$request->square_meters;
-                $debt->material_amount = (int)$request->material_amount;
-
-                $cost = ((float)$request->unit_price_of_material)*((float)$request->square_meters)*(int)$request->material_amount;
-                $debt->cost = $cost;
-                $debt->pending_payment = $cost;
-                $debt->paid_payment = 0;
-                $debt->save();
-
+                Debt::update($request->validated());
             });
 
-            return redirect("/admin/accounting/debts")->with("success","Tedarikçi borcu yapılandırıldı..");
+            return redirect("/admin/accounting/debts")->with("success",trans("general.successful"));
         }else{
-            return redirect()->back()->withErrors("Bu tedarikçiye ödeme yapılmıştır. Bu yüzden bu borç düzenlenemez.");
+            return redirect()->back()->withErrors(trans("debt.payment_has_been_made_supplier"));
         }
 
     }
@@ -117,9 +71,9 @@ class DebtController extends Controller
             DB::transaction(function () use ($debt){
                 $debt->delete();
             });
-            return redirect()->back()->with("success","Borç başarılı bir şekilde silinmiştir.");
+            return redirect()->back()->with("success",trans("general.successful"));
         }else{
-            return redirect()->back()->withErrors("Bu borca ödeme yapıldığı için maalesef silinemez.");
+            return redirect()->back()->withErrors(trans("debt.payment_has_been_made_debt"));
         }
     }
 
@@ -127,28 +81,20 @@ class DebtController extends Controller
     {
         $suppliers = Supplier::whereRelation("getDebts","pending_payment",">","0")->get();
         if(Debt::sum("pending_payment") <= 0){
-            return redirect()->back()->withErrors("Toplu ödeyebileceğiniz borç bulunmamaktadır.");
+            return redirect()->back()->withErrors(trans("debt.bulk_payment_error"));
         }
         return view("management_panel.accounting.debts.collective_pay",compact("suppliers"));
     }
 
-    public function collective_pay_post(Request $request)
+    public function collective_pay_post(Collective_pay_postRequest $request)
     {
-        $request->validate([
-            "supplier_id"=>"required",
-            "amount"=>"required|numeric"
-        ],[
-            "supplier_id.required"=>"Lütfen bir tedarikçi seçiniz.",
-            "amount.required"=>"Lütfen miktar giriniz.",
-            "amount.numeric"=>"Lütfen miktarı sayı olarak giriniz.",
-        ]);
 
         if($request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen 0'dan büyük bir sayı ile ödeme yapmayı deneyiniz.");
+            return redirect()->back()->withErrors(trans("debt.less_than_0"));
         }
 
         if(Debt::where("supplier_id",$request->supplier_id)->sum("pending_payment") < $request->amount){
-            return redirect()->back()->withErrors("Toplu borcunuzdan fazla ödeme yapmaya çalışıyorsunuz.");
+            return redirect()->back()->withErrors(trans("debt.bulk_overpayment"));
         }
 
         $remainder = $request->amount;

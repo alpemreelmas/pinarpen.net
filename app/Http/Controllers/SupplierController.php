@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Http\Requests\Accounting\Suppliers\StoreRequest;
+use App\Http\Requests\Accounting\Suppliers\UpdateRequest;
 use App\Models\Debt;
 use App\Models\DebtPayment;
 use App\Models\Supplier;
@@ -23,38 +26,22 @@ class SupplierController extends Controller
         return view("management_panel.accounting.suppliers.create");
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-           "name"=>"required",
-           "material_type"=>"required",
-           "iban"=>"required|numeric|digits:24"
-        ],[
-            "name.required"=>"Lütfen tedarikçi ismi giriniz.",
-            "material_type.required"=>"Lütfen tedarikçinin sattığı materyal türünü seçiniz.",
-            "iban.required"=>"Lütfen tedarikçinin iban adresini giriniz.",
-            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz.",
-            "iban.digits"=>"Lütfen tedarikçinin iban adresini :digits hane olacak şekilde giriniz."
-        ]);
 
         if(Supplier::where("name",$request->name)->first()){
-            return redirect()->back()->withErrors($request->name." adına sahip bir tedarikçi var.");
+            return redirect()->back()->withErrors(trans("supplier.already_exist",["name"=>$request->name]));
         }
 
         if(strlen($request->iban) != 24){
-            return redirect()->back()->withErrors("Lütfen ibanın TR kısmı hariç 24 hane olacak şekilde girildiğinden emin olunuz.");
+            return redirect()->back()->withErrors(trans("suppliers.iban_error"));
         }
 
         DB::transaction(function() use ($request) {
-
-            $supplier = new Supplier();
-            $supplier->name = $request->name;
-            $supplier->material_type = $request->material_type;
-            $supplier->iban = $request->iban;
-            $supplier->save();
+            Supplier::create($request->validated());
         });
 
-        return redirect("/admin/accounting/suppliers/")->with("success","Tedarikçi başarılı bir şekilde kayıt edilmiştir.");
+        return redirect("/admin/accounting/suppliers/")->with("success",trans("general.successful"));
 
     }
 
@@ -66,32 +53,16 @@ class SupplierController extends Controller
 
     public function update($id, Request $request)
     {
-        $request->validate([
-            "name"=>"required",
-            "material_type"=>"required",
-            "iban"=>"required|numeric|digits:24",
-        ],[
-            "name.required"=>"Lütfen tedarikçi ismi giriniz.",
-            "material_type.required"=>"Lütfen tedarikçinin sattığı materyal türünü seçiniz.",
-            "iban.required"=>"Lütfen tedarikçinin iban adresini giriniz.",
-            "iban.integer"=>"Lütfen tedarikçinin iban adresini sadece sayı şeklinde giriniz.",
-            "iban.digits"=>"Lütfen tedarikçinin iban adresini :digits hane olacak şekilde giriniz."
-        ]);
 
         if(Supplier::where("name",$request->name)->whereNotIn("id",[$id])->first()){
-            return redirect()->back()->withErrors($request->name." adına sahip bir tedarikçi var.");
+            return redirect()->back()->withErrors(trans("supplier.already_exist",["name"=>$request->name]));
         }
 
         DB::transaction(function() use ($request,$id) {
-
-            $supplier = Supplier::whereId($id)->firstOrFail();
-            $supplier->name = $request->name;
-            $supplier->material_type = $request->material_type;
-            $supplier->iban = $request->iban;
-            $supplier->save();
+            Supplier::update($request->validated());
         });
 
-        return redirect("/admin/accounting/suppliers/")->with("success","Tedarikçi başarılı bir şekilde güncellenmiştir.");
+        return redirect("/admin/accounting/suppliers/")->with("success",trans("general.successful"));
 
     }
 

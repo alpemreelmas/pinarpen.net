@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Accounting\DebtPayment\StoreRequest;
 use App\Models\DebtPayment;
 use App\Models\Debt;
 use Illuminate\Http\Request;
@@ -40,52 +41,33 @@ class DebtPaymentController extends Controller
         return view("management_panel.accounting.debt_payments.create",compact("debt"));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $request->validate([
-            "payer_name"=>"required",
-            "payer_surname"=>"required",
-            "amount"=>"required",
-            "debt_id"=>"required",
-        ],[
-            "payer_name.required"=>"Lütfen kimin ödediğini yazınız.",
-            "payer_surname.required"=>"Lütfen kimin ödediğini yazınız.",
-            "debt_id.required"=>"Bir hata meydana geldi lütfen tekrar deneyiniz.",
-            "amount.required"=>"Lütfen bir borç tutarı giriniz."
-        ]);
 
         if($request->amount <= 0){
-            return redirect()->back()->withErrors("Lütfen ödeme miktarını kontrol ediniz.");
+            return redirect()->back()->withErrors(trans('debt.check_payment_amount'));
         }
 
         $debt = Debt::where("id",$request->debt_id)->where("pending_payment",">",0)->firstOrFail();
 
         if($debt->pending_payment < $request->amount){
-            return redirect()->back()->withErrors("Kalan borç tutarından fazla borç ödemesi yapmaya çalışıyorsunuz. Yapılabilecek en fazla tutar ".$debt->pending_payment."TL'dir.");
+            return redirect()->back()->withErrors(trans('debt.overpayment_debt'));
         }
 
         DB::transaction(function () use ($request,$debt){
-
+            DebtPayment::create($request->validated());
             $debt->pending_payment -= (float)$request->amount;
             $debt->paid_payment += (float)$request->amount;
-
-            $debt_payment = new DebtPayment();
-            $debt_payment->payer_name = $request->payer_name;
-            $debt_payment->payer_surname = $request->payer_surname;
-            $debt_payment->amount = $request->amount;
-            $debt_payment->debt_id = $debt->id;
-            $debt_payment->save();
             $debt->save();
         });
 
-        return redirect("/admin/accounting/debt-payments")->with("success","Başarılı bir şekilde ödeme yapılmıştır.");
+        return redirect("/admin/accounting/debt-payments")->with("success",trans('debt.payment_successfully'));
 
     }
 
     public function destroy(Request $request)
     {
         $debt_payment = DebtPayment::whereId($request->id)->firstOrFail();
-        //TODO kısa yolu var mı kontrol et.
         $debt = Debt::whereId($debt_payment->debt_id)->firstOrFail();
         DB::transaction(function() use ($request,$debt,$debt_payment) {
 
@@ -98,6 +80,6 @@ class DebtPaymentController extends Controller
 
         });
 
-        return redirect("/admin/accounting/debt-payments")->with("success","Borç başarılı bir şekilde yapılandırıldı.");
+        return redirect("/admin/accounting/debt-payments")->with("success",trans('debt.success_debt_restructured'));
     }
 }
