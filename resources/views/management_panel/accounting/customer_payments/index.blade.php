@@ -1,10 +1,10 @@
 @extends('management_panel.layouts.master')
-@section('title','Tüm Müşteri Ödemeleri')
+@section('title',__("customer.all_customer_pay_title"))
 @section('content')
 
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
-            <h6 class="m-0 font-weight-bold text-primary">{{$customer_payments->count()}} tane müşteri ödemesi bulundu.</h6>
+            <h6 class="m-0 font-weight-bold text-primary">{{$customer_payments->count()}} {{__("customer.customer_payments_found")}}</h6>
         </div>
         <div class="card-body">
             <x-flash-messages />
@@ -12,26 +12,26 @@
                 <table class="table table-bordered" id="table" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>Müşteri Adı</th>
-                        <th>Proje Materyal Tipi</th>
-                        <th>Ödenen Tutar (Tek Bir Taksit)</th>
-                        <th>Ödeyen Kişi</th>
-                        <th>Ödeme Tarihi</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.name")}}</th>
+                        <th>{{__("customer.type_of_material")}}</th>
+                        <th>{{__("customer.paid_amount")}}</th>
+                        <th>{{__("customer.payer_name")}}</th>
+                        <th>{{__("customer.payment_date")}}</th>
+                        <th>{{__("customer.transactions")}}</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Müşteri Adı</th>
-                        <th>Proje Materyal Tipi</th>
-                        <th>Ödenen Tutar (Tek Bir Taksit)</th>
-                        <th>Ödeyen Kişi</th>
-                        <th>Ödeme Tarihi</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.name")}}</th>
+                        <th>{{__("customer.type_of_material")}}</th>
+                        <th>{{__("customer.paid_amount")}}</th>
+                        <th>{{__("customer.payer_name")}}</th>
+                        <th>{{__("customer.payment_date")}}</th>
+                        <th>{{__("customer.transactions")}}</th>
                     </tr>
                     </tfoot>
                     <tbody>
-                    @foreach($customer_payments as $customer_payment)
+                    @foreach)($customer_payments as $customer_payment)
                         <tr>
                             <td>{{$customer_payment->getProject->getCustomer->name}} {{$customer_payment->getProject->getCustomer->surname}}</td>
                             <td>{{$customer_payment->getProject->material_type}}</td>
@@ -88,13 +88,13 @@
         $(".deleteBtn").click(function (e) {
             delete_id = e.target.getAttribute("delete_id");
             new Swal({
-                title: 'Bu ödemeyi silmek istediğinizden emin misiniz ?',
+                title: '{{__("customer.confirm_deletion")}}',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Evet, eminim sil.',
-                cancelButtonText: 'Hayır, emin değilim silme!',
+                confirmButtonText: '{{__("customer.yes_delete")}}',
+                cancelButtonText: '{{__("customer.no_do_not_delete")}}',
                 confirmButtonClass: 'btn btn-warning',
                 cancelButtonClass: 'btn btn-danger',
             }).then(function (result) {
@@ -116,9 +116,9 @@
             }, function (dismiss) {
                 if (dismiss === 'cancel') {
                     new swal(
-                        'İptal Edildi',
-                        'İşleminiz iptal edildi',
-                        'error'
+                        '{{__("customer.canceled")}}',
+                        '{{__("customer.operation_canceled")}}',
+                        '{{__("customer.error")}}'
                     )
                 }
             })

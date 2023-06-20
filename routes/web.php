@@ -56,21 +56,14 @@ Route::prefix('admin')->middleware(["is_admin"])->group(function () {
         Route::delete("/",[servicesController::class, "delete"]);
     });
 
-    Route::prefix('portfolios')->group(function () {
-        Route::get('/', [portfoliosController::class, 'index']);
-        Route::get('/create', [portfoliosController::class, 'create']);
-        Route::post("/",[portfoliosController::class, "store"]);
-        Route::get("/{id}/edit",[portfoliosController::class, "edit"]);
-        Route::put("/{id}",[portfoliosController::class, "update"]);
-        Route::delete("/",[portfoliosController::class, "delete"]);
-    });
+    Route::resource('portfolios',portfoliosController::class);
 
     // Accounting Routes
     Route::get("/accounting",[homeController::class,"accounting"]);
 
     Route::prefix("/accounting")->group(function (){
 
-        Route::resource("customers",CustomerController::class)->except("destroy");
+        Route::resource("customers",CustomerController::class)->except("destroy","show");
         Route::get("/customers/{customer}/inspect",[CustomerController::class,"inspect"])->name("customers.inspect");
 
         Route::resource("projects",ProjectController::class);

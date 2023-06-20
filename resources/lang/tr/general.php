@@ -15,5 +15,7 @@ return [
     'operations' => 'İşlemler',
     'there_is_no_record'=>'Kayıt bulunmamaktadır',
     'complete'=>'Tamamla',
-    'successful'=>'Başarılı',
+    'successful'=>'İşleminiz başarılı bir şekilde gerçekleşmiştir',
+    'will_be_refresh'=>'Sayfa 3 saniye içinde yneilenecektir.',
+    'this_func_is_unable_in_demo' => "Bu fonksiyon demo aşamasında kullanılamaz.",
 ];

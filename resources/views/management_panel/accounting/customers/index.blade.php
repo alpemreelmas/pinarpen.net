@@ -58,7 +58,7 @@
             $('#table').DataTable( {
                 dom: 'Bfrtip',
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json"
                 },
                 buttons: [
                     {

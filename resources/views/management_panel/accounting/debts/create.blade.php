@@ -1,5 +1,5 @@
 @extends('management_panel.layouts.master')
-@section('title','Tedarikçi Borcu Ekle')
+@section('title',__("supplier.pay_supplier_debt"))
 @section('content')
     <div class="container-fluid">
         <div class="card shadow mb-4">
@@ -22,7 +22,7 @@
                 <form method="POST" action="{{url("/admin/accounting/debts/")}}">
                     @csrf
                     <div class="form-group">
-                        <label for="supplier_id" >Tedarikçi Seçiniz</label>
+                        <label for="supplier_id" >{{__("suppliers.choose_supplier")}}</label>
                         <select name="supplier_id" class="form-control">
                             @foreach($suppliers as $supplier)
                                 <option value="{{$supplier->id}}" @if(old("supplier_id") == $supplier->id) selected @endif>{{$supplier->name}}</option>
@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="material_type">Materyal Türü</label>
+                        <label for="material_type">{{__("customer.material_type")}}</label>
                         <select name="material_type" id="material_type" class="form-control" required>
                             <option value="Cam Balkon" {{ old("materail_type") == "Cam Balkon" ? "selected":"" }}>Cam Balkon</option>
                             <option value="Sineklik" {{ old("materail_type") == "Sineklik" ? "selected":"" }}>Sineklik</option>

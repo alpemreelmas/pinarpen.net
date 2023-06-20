@@ -1,5 +1,5 @@
 @extends('management_panel.layouts.master')
-@section('title','Tedarikçi Borcu Ekle')
+@section('title',__("suppliers.pay_supplier_debt"))
 @section('content')
     <div class="container-fluid">
         <div class="card shadow mb-4">
@@ -22,7 +22,7 @@
                 <form method="POST" action="{{url("/admin/accounting/debts/collective-pay")}}">
                     @csrf
                     <div class="form-group">
-                        <label for="supplier_id" >Tedarikçi Seçiniz</label>
+                        <label for="supplier_id" >{{__("supplier.choose_supplier")}}</label>
                         <select name="supplier_id" class="form-control">
                             @foreach($suppliers as $supplier)
                                 <option value="{{$supplier->id}}" @if(old("supplier_id") == $supplier->id) selected @endif>{{$supplier->name}} - {{$supplier->getDebts->sum("pending_payment")}} TL</option>
@@ -33,7 +33,7 @@
                         <input type="number" name="amount" min="1" id="amount" class="form-control" required value="{{old("amount")}}">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Toplu Tedarikçi Borcu Öde</button>
+                        <button type="submit" class="btn btn-primary btn-block">{{__("suppliers.pay_collective_payment")}}</button>
                     </div>
                 </form>
             </div>

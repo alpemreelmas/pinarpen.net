@@ -23,20 +23,20 @@
                 <table class="table table-bordered" id="table" width="100%" cellspacing="0">
                     <thead>
                     <tr>
-                        <th>Ödeyen Kişi</th>
-                        <th>Ödenen Tutar</th>
-                        <th>Tedarikçi</th>
-                        <th>Ödeme Tarihi</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.payer_name")}}</th>
+                        <th>{{__("customer.payment_amount")}}</th>
+                        <th>{{__("suppliers.supplier")}}</th>
+                        <th>{{__("customer.payment_date")}}</th>
+                        <th>{{__("general.operations")}}</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>Ödeyen Kişi</th>
-                        <th>Ödenen Tutar</th>
-                        <th>Tedarikçi</th>
-                        <th>Ödeme Tarihi</th>
-                        <th>İşlemler</th>
+                        <th>{{__("customer.payer_name")}}</th>
+                        <th>{{__("customer.payment_amount")}}</th>
+                        <th>{{__("suppliers.supplier")}}</th>
+                        <th>{{__("customer.payment_date")}}</th>
+                        <th>{{__("general.operations")}}</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -64,7 +64,7 @@
             $('#table').DataTable( {
                 dom: 'Bfrtip',
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json"
                 },
                 buttons: [
                     {
@@ -97,13 +97,13 @@
         $(".deleteBtn").click(function (e) {
             delete_id = e.target.getAttribute("delete_id");
             new Swal({
-                title: 'Bu ödemeyi silmek istediğinizden emin misiniz ?',
+                title: '{{__("customer.confirm_deletion")}}',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Evet, eminim sil.',
-                cancelButtonText: 'Hayır, emin değilim silme!',
+                confirmButtonText: '{{__("customer.yes_delete")}}',
+                cancelButtonText: '{{__("customer.no_do_not_delete")}}',
                 confirmButtonClass: 'btn btn-warning',
                 cancelButtonClass: 'btn btn-danger',
             }).then(function (result) {
@@ -118,8 +118,8 @@
                         },
                         success:function () {
                             new swal(
-                                'Başarılı!',
-                                'Ödeme başarılı bir şekilde silindi. Sayfa 3 saniye içinde yenilenecektir.',
+                                '{{__("general.successful")}}',
+                                '{{__("general.will_be_refresh")}}',
                                 'success'
                             )
                             setTimeout(function () {
@@ -132,9 +132,9 @@
             }, function (dismiss) {
                 if (dismiss === 'cancel') {
                     new swal(
-                        'İptal Edildi',
-                        'İşleminiz iptal edildi',
-                        'error'
+                        '{{__("customer.canceled")}}',
+                        '{{__("customer.operation_canceled")}}',
+                        '{{__("customer.error")}}'
                     )
                 }
             })
