@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class servicesController extends Controller
+class ServicesController extends Controller
 {
 
     public function index()

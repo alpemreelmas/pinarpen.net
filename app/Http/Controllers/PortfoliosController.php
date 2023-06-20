@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
-class portfoliosController extends Controller
+class PortfoliosController extends Controller
 {
     /**
      * Display a listing of the resource.

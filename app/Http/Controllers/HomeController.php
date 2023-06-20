@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Portfolio;
 
-class homeController extends Controller
+class HomeController extends Controller
 {
     public function index(Request $request){
         SEOTools::setTitle("Anasayfa");
