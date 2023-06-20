@@ -35,6 +35,7 @@
                             <option value="Duşakabin" {{ old("materail_type") == "Duşakabin" ? "selected":"" }}>Duşakabin</option>
                             <option value="Panjur" {{ old("materail_type") == "Panjur" ? "selected":"" }}>Panjur</option>
                             <option value="Küpeşte" {{ old("materail_type") == "Küpeşte" ? "selected":"" }}>Küpeşte</option>
+                            <option value="Cam Deliği" {{ old("materail_type") == "Cam Deliği" ? "selected":"" }}>Cam Deliği</option>
                         </select>
                     </div>
                     <label for="basic-addon1">Tedarikçi Iban</label>

@@ -53,6 +53,7 @@
                             <option value="Duşakabin" {{ $project->material_type == "Duşakabin" ? "selected":"" }}>Duşakabin</option>
                             <option value="Panjur" {{ $project->materail_type == "Panjur" ? "selected":"" }}>Panjur</option>
                             <option value="Küpeşte" {{ $project->material_type == "Küpeşte" ? "selected":"" }}>Küpeşte</option>
+                            <option value="Cam Deliği" {{ old("materail_type") == "Cam Deliği" ? "selected":"" }}>Cam Deliği</option>
                         </select>
                     </div>
                     <div class="form-group">

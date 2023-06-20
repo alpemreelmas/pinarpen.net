@@ -40,6 +40,7 @@
                             <option value="Duşakabin" {{ $debt->material_type == "Duşakabin" ? "selected":"" }}>Duşakabin</option>
                             <option value="Panjur" {{ $debt->materail_type == "Panjur" ? "selected":"" }}>Panjur</option>
                             <option value="Küpeşte" {{ $debt->material_type == "Küpeşte" ? "selected":"" }}>Küpeşte</option>
+                            <option value="Cam Deliği" {{ $debt->material_type == "Cam Deliği" ? "selected":"" }}>Cam Deliği</option>
                         </select>
                     </div>
                     <div class="form-group">

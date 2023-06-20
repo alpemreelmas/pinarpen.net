@@ -37,6 +37,7 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
                             @elseif($supplier->material_type == "Sineklik")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik" selected>Sineklik</option>
@@ -45,6 +46,7 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
                             @elseif($supplier->material_type == "PVC Pencere")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik">Sineklik</option>
@@ -53,6 +55,7 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
                             @elseif($supplier->material_type == "PVC Kapı")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik">Sineklik</option>
@@ -61,6 +64,7 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
                             @elseif($supplier->material_type == "Duşakabin")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik">Sineklik</option>
@@ -69,6 +73,7 @@
                                 <option value="Duşakabin" selected>Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
                             @elseif($supplier->material_type == "Küpeşte")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik">Sineklik</option>
@@ -77,7 +82,8 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur">Panjur</option>
                                 <option value="Küpeşte" selected>Küpeşte</option>
-                                @elseif($supplier->material_type == "Panjur")
+                                <option value="Cam Deliği">Cam Deliği</option>
+                            @elseif($supplier->material_type == "Panjur")
                                 <option value="Cam Balkon">Cam Balkon</option>
                                 <option value="Sineklik">Sineklik</option>
                                 <option value="PVC Pencere" >PVC Pencere</option>
@@ -85,9 +91,17 @@
                                 <option value="Duşakabin">Duşakabin</option>
                                 <option value="Panjur" selected>Panjur</option>
                                 <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği">Cam Deliği</option>
+                            @elseif($supplier->material_type == "Cam Deliği")
+                                <option value="Cam Balkon">Cam Balkon</option>
+                                <option value="Sineklik">Sineklik</option>
+                                <option value="PVC Pencere" >PVC Pencere</option>
+                                <option value="PVC Kapı" >PVC Kapı</option>
+                                <option value="Duşakabin">Duşakabin</option>
+                                <option value="Panjur">Panjur</option>
+                                <option value="Küpeşte">Küpeşte</option>
+                                <option value="Cam Deliği" selected>Cam Deliği</option>
                             @endif
-                
-
                         </select>
                     </div>
                     <label for="basic-addon1">Tedarikçi Iban</label>
