@@ -102,11 +102,6 @@
         </div>
 
     </li>
-    <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='customer-payments') active @endif">
-        <a class="nav-link " href="{{url("/admin/accounting/customer-payments/")}}">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Müşteri Borç Ödemeleri</span></a>
-    </li>
 
     <li class="nav-item @if(Request::segment(2)=='accounting' and Request::segment(3)=='debt-payments') active @endif">
         <a class="nav-link " href="{{url("/admin/accounting/debt-payments/")}}">

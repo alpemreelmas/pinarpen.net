@@ -33,7 +33,7 @@ class CustomerPaymentController extends Controller
         return view("management_panel.accounting.customer_payments.create",compact("customers","project"));
     }
 
-    public function store(StoreRequest $request,Project $project)
+    public function store(Project $project,StoreRequest $request)
     {
         if($project->pending_payment < $request->amount){
             return redirect()->back()->withErrors(trans('customer.excessive_amount'));

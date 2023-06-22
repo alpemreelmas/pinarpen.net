@@ -31,7 +31,7 @@
                     </tr>
                     </tfoot>
                     <tbody>
-                    @foreach)($customer_payments as $customer_payment)
+                    @foreach($customer_payments as $customer_payment)
                         <tr>
                             <td>{{$customer_payment->getProject->getCustomer->name}} {{$customer_payment->getProject->getCustomer->surname}}</td>
                             <td>{{$customer_payment->getProject->material_type}}</td>
@@ -55,7 +55,7 @@
             $('#table').DataTable( {
                 dom: 'Bfrtip',
                 "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/Turkish.json"
+                    "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/{{$app->getLocale() == "en" ? 'English' : 'Turkish'}}.json"
                 },
                 buttons: [
                     {

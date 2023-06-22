@@ -4,8 +4,11 @@
 
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="display: flex; justify-content: space-between; align-items: center;">
-            <h6 class="m-0 font-weight-bold text-primary">{{$project->getCustomer->name." ".$project->getCustomer->surname }}
-                adlı kullanıcı ile yaptığınız projenin detayları.</h6>
+            <div class="d-flex justify-content-between flex-row w-100 align-items-center">
+                <span class="m-0 font-weight-bold text-primary align-items-center">{{$project->getCustomer->name." ".$project->getCustomer->surname }}
+                    adlı kullanıcı ile yaptığınız projenin detayları.</span>
+                <a href="{{url("admin/accounting/projects/$project->id/customer-payments")}}" class="btn btn-primary">Ödeme Yönetimi/Geçmişi</a>
+            </div>
         </div>
         <div class="card-body">
             @if($errors->any())
